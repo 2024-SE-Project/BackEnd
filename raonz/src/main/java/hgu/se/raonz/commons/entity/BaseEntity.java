@@ -1,4 +1,4 @@
-package hgu.se.raonz.commons;
+package hgu.se.raonz.commons.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

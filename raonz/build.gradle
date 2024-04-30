@@ -26,6 +26,7 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security' 이거 나중에 쓸 거임
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
