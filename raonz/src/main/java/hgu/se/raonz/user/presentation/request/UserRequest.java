@@ -8,6 +8,6 @@ import lombok.*;
 public class UserRequest {
     private String name;
     private String userId;
-    private Long studentId;
     private String phoneNumber;
+    private Long studentId;
 }

@@ -48,6 +48,9 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // /user 로 시작하는 요청은 USER 권한이 있는 유저에게만 허용
                 .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/post/add").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/post/delete/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/post/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/test/**").permitAll()
                 .anyRequest().denyAll().and()
 
