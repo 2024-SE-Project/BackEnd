@@ -20,7 +20,7 @@ public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long postId = null;
+    private Long postId;
 
 
 //    private String teamId; // 나중에 필요하면 추가
