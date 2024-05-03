@@ -2,6 +2,7 @@ package hgu.se.raonz.user.domain.entity;
 
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.commons.security.Authority;
+import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.user.presentation.request.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,13 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Post post;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> postList;
+
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Authority> roles = new ArrayList<>();
@@ -45,4 +53,12 @@ public class User extends BaseEntity {
                 .build();
     }
 
+//    public void deletePost(Post post) {
+//        for (Post p: postList) {
+//            if (p.getPostId().equals(post.getPostId())) {
+//                postList.remove(p);
+//                return;
+//            }
+//        }
+//    }
 }
