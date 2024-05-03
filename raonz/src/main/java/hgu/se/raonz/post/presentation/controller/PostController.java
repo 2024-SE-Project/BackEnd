@@ -24,7 +24,7 @@ public class PostController {
         return ResponseEntity.ok(post.getPostId());
     }
 
-    @DeleteMapping("/post/delete/{postId}")
+    @DeleteMapping("/post/delete/{postId}") // 삭제
     public ResponseEntity<Long> deletePost(@PathVariable Long postId) {
         Long returnId = postService.deletePost(postId);
 
