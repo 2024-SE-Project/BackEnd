@@ -52,6 +52,16 @@ public class SecurityConfig {
                 .requestMatchers("/post/delete/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/post/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/post/get/**").permitAll() //.hasRole("MANAGER")
+
+                .requestMatchers("/material/add").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/material/delete/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/material/update/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/material/get/**").permitAll() //.hasRole("MANAGER")
+
+                .requestMatchers("/faq/add").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/faq/delete/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/faq/update/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/faq/get/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/test/**").permitAll()
                 .anyRequest().denyAll().and()
 
