@@ -54,6 +54,8 @@ public class JWTProvider {
     }
 
     public Authentication getAuthentication(String token) {
+        String temp = this.getAccount(token);
+
         UserDetails userDetails = jpaUserService.loadUserByUserId(this.getAccount(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

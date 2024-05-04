@@ -58,8 +58,8 @@ public class LoginService {
                     .userId(googleUser.getId())
                     .name(googleUser.getName())
                     .email(googleUser.getEmail())
-                    .roles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()))
                     .build();
+            user.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
             userRepository.save(user);
         } else {
             user = optionalUser.get();
