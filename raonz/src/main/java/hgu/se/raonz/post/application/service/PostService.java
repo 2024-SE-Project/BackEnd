@@ -4,9 +4,11 @@ import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.domain.repository.PostRepository;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
+import hgu.se.raonz.post.presentation.response.PostResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +51,13 @@ public class PostService {
         }
 
         return null;
+    }
+
+    @Transactional
+    public PostResponse getPostResponse(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post == null) return null;
+        System.out.println("Success to find Post");
+        return PostResponse.toResponse(post);
     }
 }

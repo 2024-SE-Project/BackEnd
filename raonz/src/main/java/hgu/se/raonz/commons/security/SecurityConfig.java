@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers("/post/add").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/post/delete/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/post/update/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/post/get/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/test/**").permitAll()
                 .anyRequest().denyAll().and()
 
