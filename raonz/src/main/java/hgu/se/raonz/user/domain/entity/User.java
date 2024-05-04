@@ -25,7 +25,7 @@ public class User extends BaseEntity {
 
     private Long studentId;
 
-    private String phoneNumber;
+    private String email;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Post post;
@@ -48,7 +48,7 @@ public class User extends BaseEntity {
         return User.builder()
                 .name(userRequest.getName())
                 .userId(userRequest.getUserId())
-                .phoneNumber(userRequest.getPhoneNumber())
+                .email(userRequest.getPhoneNumber())
                 .studentId(userRequest.getStudentId())
                 .build();
     }

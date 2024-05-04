@@ -2,10 +2,14 @@ package hgu.se.raonz.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import hgu.se.raonz.commons.jwt.JWTProvider;
+import hgu.se.raonz.commons.security.Authority;
 import hgu.se.raonz.login.response.GoogleResponse;
 import hgu.se.raonz.login.social.GoogleOAuthToken;
 import hgu.se.raonz.login.social.GoogleOauth;
 import hgu.se.raonz.login.social.GoogleUser;
+import hgu.se.raonz.user.domain.entity.User;
+import hgu.se.raonz.user.domain.repository.UserRepository;
+import hgu.se.raonz.user.presentation.response.UserResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
     private final GoogleOauth googleOauth;
     private final HttpServletResponse response;
+    private final UserRepository userRepository;
     private final JWTProvider jwtProvider;
 
     public void request() throws IOException {
@@ -40,11 +47,24 @@ public class LoginService {
 
         return googleUser;
     }
+
+    @Transactional
+    public UserResponse login(GoogleUser googleUser) {
+        Optional<User> optionalUser = userRepository.findById(googleUser.getId());
+        User user;
+
+        if(optionalUser.isEmpty()) {
+            user = User.builder()
+                    .userId(googleUser.getId())
+                    .name(googleUser.getName())
+                    .email(googleUser.getEmail())
+                    .roles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()))
+                    .build();
+            userRepository.save(user);
+        } else {
+            user = optionalUser.get();
+        }
+
+        return UserResponse.toResponse(user, jwtProvider.createToken(user.getUserId(), user.getRoles()));
+    }
 }
-
-// @Value("${spring.security.oauth2.client.registration.google.redirecct_url}")
-
-// https://accounts.google.com/o/oauth2/v2/auth?client_id=783995798085-4spraevn1eimivgblqhj2t0usnm9e9u7.apps.googleusercontent.com&redirect_uri=http://localhost:8080/api/v1/oauth2/google&response_type=code&scope=email%20profile&access-type=offline
-
-//             client-id: 783995798085-4spraevn1eimivgblqhj2t0usnm9e9u7.apps.googleusercontent.com
-//            client-secret: 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
