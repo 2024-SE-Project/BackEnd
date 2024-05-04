@@ -67,6 +67,7 @@ public class PostService {
 
     @Transactional
     public List<PostResponse> getPostResponseList(int index, int type) {
+        index--; // index == pageNum-1
         List<Post> postList = postRepository.findPostListByType(type);
         postList.sort(Comparator.comparing(Post::getPostId).reversed());
         List<PostResponse> postResponseList = new ArrayList<>();
