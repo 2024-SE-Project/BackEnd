@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests()
                 // 회원가입과 로그인은 모두 승인
-                .requestMatchers("/", "/auth/login").permitAll()
+                .requestMatchers("/").permitAll()
                 // /admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // /user 로 시작하는 요청은 USER 권한이 있는 유저에게만 허용
@@ -52,8 +52,9 @@ public class SecurityConfig {
                 .requestMatchers("/post/delete/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/post/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/test/**").permitAll()
+                .requestMatchers("/login/oauth2/**").permitAll()
+                .requestMatchers("api/v1/oauth2/google").permitAll()
                 .anyRequest().denyAll().and()
-
                 .addFilterBefore(new JWTAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
                         new AccessDeniedHandler() {
@@ -66,7 +67,10 @@ public class SecurityConfig {
                                 response.getWriter().write("권한이 없는 사용자입니다.");
                             }
                         })
+                ).oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/login/oauth2/google/redirect", true)
                 );
+
 
         return httpSecurity.build();
     }
