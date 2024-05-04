@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -59,5 +63,16 @@ public class PostService {
         if (post == null) return null;
         System.out.println("Success to find Post");
         return PostResponse.toResponse(post);
+    }
+
+    @Transactional
+    public List<PostResponse> getPostResponseList(int index, int type) {
+        List<Post> postList = postRepository.findPostListByType(type);
+        postList.sort(Comparator.comparing(Post::getPostId).reversed());
+        List<PostResponse> postResponseList = new ArrayList<>();
+        for (int i = index*10; i < index*10 + 10 && i < postList.size(); i++) {
+            postResponseList.add(PostResponse.toResponse(postList.get(i)));
+        }
+        return postResponseList;
     }
 }

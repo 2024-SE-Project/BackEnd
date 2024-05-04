@@ -49,9 +49,11 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
 
-//    @GetMapping("/post/get/all/{index}")
-//    public ResponseEntity<List<Post>> getPostAll(@PathVariable int index) {
-//        // Return the top 10 posts with the highest postId among posts with 1 post type in the order of highest order
-//
-//    }
+    @GetMapping("/post/get/all/{index}")
+    public ResponseEntity<List<PostResponse>> getPostAll(@PathVariable int index) {
+        // Return the top 10 posts with the highest postId among posts with 1 post type in the order of highest order
+        List<PostResponse> postResponseList = postService.getPostResponseList(index, 1);
+
+        return ResponseEntity.ok(postResponseList);
+    }
 }
