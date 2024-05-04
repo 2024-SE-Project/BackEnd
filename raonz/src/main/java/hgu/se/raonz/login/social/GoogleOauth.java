@@ -80,7 +80,7 @@ public class GoogleOauth implements SocialOauth {
 
         //header에 accessToken을 담는다.
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization","Bearer "+oAuthToken.getAccess_token());
+        headers.add("Authorization","Bearer "+ oAuthToken.getAccess_token());
 
         //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);

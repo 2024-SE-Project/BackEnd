@@ -14,6 +14,7 @@ public class JPAUserService {
     private final UserRepository userRepository;
 
     public UserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UsernameNotFoundException("Invalid authentication!")
         );

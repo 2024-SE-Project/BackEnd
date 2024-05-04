@@ -40,8 +40,8 @@ public class JWTProvider {
         secretKey = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String account, List<Authority> roles) {
-        Claims claims = Jwts.claims().setSubject(account);
+    public String createToken(String userId, List<Authority> roles) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         claims.put("roles", roles);
 
         Date now = new Date();
