@@ -3,14 +3,12 @@ package hgu.se.raonz.commons.security;
 
 import hgu.se.raonz.commons.jwt.JWTAuthenticationFilter;
 import hgu.se.raonz.commons.jwt.JWTProvider;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,19 +19,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final JWTProvider jwtProvider;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -43,7 +37,7 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests()
                 // 회원가입과 로그인은 모두 승인
-                .requestMatchers("/", "/auth/login").permitAll()
+                .requestMatchers("/").permitAll()
                 // /admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // /user 로 시작하는 요청은 USER 권한이 있는 유저에게만 허용
@@ -63,8 +57,12 @@ public class SecurityConfig {
                 .requestMatchers("/faq/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/faq/get/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/test/**").permitAll()
+                .requestMatchers("/login/oauth2/**").permitAll()
+                .requestMatchers("/api/v1/oauth2/google").permitAll()
                 .anyRequest().denyAll().and()
-
+                .oauth2Login(oauth2 -> oauth2
+                        .loginProcessingUrl("api/v1/oauth2/*")
+                )
                 .addFilterBefore(new JWTAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
                         new AccessDeniedHandler() {
@@ -78,6 +76,7 @@ public class SecurityConfig {
                             }
                         })
                 );
+
 
         return httpSecurity.build();
     }
