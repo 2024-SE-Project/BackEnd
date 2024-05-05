@@ -1,5 +1,6 @@
 package hgu.se.raonz.post.presentation.controller;
 
+import hgu.se.raonz.commons.jwt.JWTProvider;
 import hgu.se.raonz.post.application.service.PostService;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.domain.repository.PostRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final JWTProvider jwtProvider;
 
     public int getTypeByPath(String path) {
         path = path.split("/")[1].trim();
@@ -31,6 +33,11 @@ public class PostController {
     @PostMapping({"/post/add", "/material/add", "/faq/add"})
     public ResponseEntity<Long> addPost(@RequestBody PostRequest postRequest, HttpServletRequest request) {
         Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()));
+
+        String token = jwtProvider.resolveToken(request);
+        String email = jwtProvider.getAccount(token);
+
+        System.out.println(email);
 
         return ResponseEntity.ok(post.getPostId());
     }
