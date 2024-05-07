@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/faq/delete/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/faq/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/faq/get/**").permitAll() //.hasRole("MANAGER")
-                .requestMatchers("/test/**").permitAll()
+                .requestMatchers("/comment/**").permitAll()
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
                 .requestMatchers("/star/**").permitAll()
