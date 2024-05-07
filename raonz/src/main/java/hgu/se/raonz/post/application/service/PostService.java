@@ -5,6 +5,8 @@ import hgu.se.raonz.post.domain.repository.PostRepository;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
 import hgu.se.raonz.post.presentation.response.PostResponse;
+import hgu.se.raonz.user.domain.entity.User;
+import hgu.se.raonz.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Post addPost(PostRequest postRequest, int type) {
-        Post post = Post.toAdd(postRequest, type);
+    public Post addPost(PostRequest postRequest, int type, String user_id) {
+        List<User> userList = userRepository.findUserListByUserId(user_id);
+        if (userList.size() != 1) {
+            System.out.println(user_id);
+            System.out.println("userList size = " + userList.size() + "Duplicate email");
+//            return null;
+        }
+        Post post = Post.toAdd(postRequest, type, userList.get(0));
 
         postRepository.save(post);
 

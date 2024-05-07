@@ -32,12 +32,12 @@ public class PostController {
 
     @PostMapping({"/post/add", "/material/add", "/faq/add"})
     public ResponseEntity<Long> addPost(@RequestBody PostRequest postRequest, HttpServletRequest request) {
-        Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()));
-
         String token = jwtProvider.resolveToken(request);
-        String email = jwtProvider.getAccount(token);
+        String user_id = jwtProvider.getAccount(token);
 
-        System.out.println(email);
+        System.out.println(user_id);
+
+        Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
 
         return ResponseEntity.ok(post.getPostId());
     }
