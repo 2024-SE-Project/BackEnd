@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CommentController {
     private final CommentService commentService;
     private final JWTProvider jwtProvider;

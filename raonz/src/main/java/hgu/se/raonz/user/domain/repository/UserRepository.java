@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    @Query("select r from User r where r.userId = :userId")
+    @Query("select r from User r where r.id = :userId")
     List<User> findUserListByUserId(String userId);
 }

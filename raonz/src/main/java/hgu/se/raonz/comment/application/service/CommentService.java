@@ -54,6 +54,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElse(null);
 
         if(comment == null) {
+
             return null;
         }
 
