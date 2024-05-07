@@ -1,13 +1,10 @@
 package hgu.se.raonz.post.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 
 @Entity
@@ -20,7 +17,7 @@ public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long id;
 
 
 //    private String teamId; // 나중에 필요하면 추가

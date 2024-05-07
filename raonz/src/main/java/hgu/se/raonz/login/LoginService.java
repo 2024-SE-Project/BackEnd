@@ -3,7 +3,6 @@ package hgu.se.raonz.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import hgu.se.raonz.commons.jwt.JWTProvider;
 import hgu.se.raonz.commons.security.Authority;
-import hgu.se.raonz.login.response.GoogleResponse;
 import hgu.se.raonz.login.social.GoogleOAuthToken;
 import hgu.se.raonz.login.social.GoogleOauth;
 import hgu.se.raonz.login.social.GoogleUser;
@@ -65,6 +64,6 @@ public class LoginService {
             user = optionalUser.get();
         }
 
-        return UserResponse.toResponse(user, jwtProvider.createToken(user.getUserId(), user.getRoles()));
+        return UserResponse.toResponse(user, jwtProvider.createToken(user.getId(), user.getRoles()));
     }
 }

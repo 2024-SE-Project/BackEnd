@@ -19,7 +19,7 @@ import java.util.List;
 public class User extends BaseEntity {
 
     @Id
-    private String userId;
+    private String id;
 
     private String name;
 
@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     public static User toAdd(UserRequest userRequest) {
         return User.builder()
                 .name(userRequest.getName())
-                .userId(userRequest.getUserId())
+                .id(userRequest.getUserId())
                 .email(userRequest.getPhoneNumber())
                 .studentId(userRequest.getStudentId())
                 .build();

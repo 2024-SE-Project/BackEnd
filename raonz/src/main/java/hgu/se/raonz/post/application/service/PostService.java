@@ -43,11 +43,11 @@ public class PostService {
         List<User> userList = userRepository.findUserListByUserId(userId);
 
         if(post != null) {
-            if (!post.getUser().getUserId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
+            if (!post.getUser().getId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
                 System.out.println(userId);
                 return null;
             }
-            Long returnId = post.getPostId();
+            Long returnId = post.getId();
             postRepository.delete(post);
 
             return returnId;
@@ -61,7 +61,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElse(null);
 
         if(post != null) {
-            if (!post.getUser().getUserId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
+            if (!post.getUser().getId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
                 System.out.println(userId);
                 return null;
             }
@@ -69,7 +69,7 @@ public class PostService {
             post.setContent(postUpdateRequest.getContent());
             postRepository.save(post);
 
-            return post.getPostId();
+            return post.getId();
         }
 
         return null;
@@ -87,7 +87,7 @@ public class PostService {
     public List<PostResponse> getPostResponseList(int index, int type) {
         index--; // index == pageNum-1
         List<Post> postList = postRepository.findPostListByType(type);
-        postList.sort(Comparator.comparing(Post::getPostId).reversed());
+        postList.sort(Comparator.comparing(Post::getId).reversed());
         List<PostResponse> postResponseList = new ArrayList<>();
         for (int i = index*10; i < index*10 + 10 && i < postList.size(); i++) {
             postResponseList.add(PostResponse.toResponse(postList.get(i)));

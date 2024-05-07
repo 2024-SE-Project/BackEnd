@@ -18,7 +18,7 @@ public class UserController {
 
         User user = userService.addUser(userRequest);
 
-        return ResponseEntity.ok(user.getUserId());
+        return ResponseEntity.ok(user.getId());
     }
 
     @GetMapping("/user")
