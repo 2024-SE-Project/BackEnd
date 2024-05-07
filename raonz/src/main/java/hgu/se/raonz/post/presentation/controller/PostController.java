@@ -30,26 +30,31 @@ public class PostController {
 
     @PostMapping({"/post/add", "/material/add", "/faq/add"})
     public ResponseEntity<Long> addPost(@RequestBody PostRequest postRequest, HttpServletRequest request) {
-        Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()));
-
         String token = jwtProvider.resolveToken(request);
-        String email = jwtProvider.getAccount(token);
+        String user_id = jwtProvider.getAccount(token);
 
-        System.out.println(email);
+        System.out.println(user_id);
+
+        Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
 
         return ResponseEntity.ok(post.getId());
     }
 
     @DeleteMapping({"/post/delete/{postId}", "/material/delete/{postId}", "/faq/delete/{postId}"}) // 삭제
-    public ResponseEntity<Long> deletePost(@PathVariable Long postId) {
-        Long returnId = postService.deletePost(postId);
+    public ResponseEntity<Long> deletePost(@PathVariable Long postId, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+
+        Long returnId = postService.deletePost(postId, user_id);
 
         return ResponseEntity.ok(returnId);
     }
 
     @PatchMapping({"/post/update/{postId}", "/material/update/{postId}", "/faq/update/{postId}"})
-    public ResponseEntity<Long> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest) {
-        Long returnId = postService.updatePost(postId, postUpdateRequest);
+    public ResponseEntity<Long> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+        Long returnId = postService.updatePost(postId, postUpdateRequest, user_id);
 
         return ResponseEntity.ok(returnId);
     }
