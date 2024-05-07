@@ -90,7 +90,7 @@ public class PostService {
         postList.sort(Comparator.comparing(Post::getId).reversed());
         List<PostResponse> postResponseList = new ArrayList<>();
         for (int i = index*10; i < index*10 + 10 && i < postList.size(); i++) {
-            postResponseList.add(PostResponse.toResponse(postList.get(i)));
+            postResponseList.add(PostResponse.toListResponse(postList.get(i)));
         }
         return postResponseList;
     }

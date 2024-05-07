@@ -1,10 +1,14 @@
 package hgu.se.raonz.post.domain.entity;
 
+import hgu.se.raonz.comment.domain.entity.Comment;
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.post.presentation.request.PostRequest;
+import hgu.se.raonz.scrap.domain.entity.Scrap;
 import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 
 @Entity
@@ -28,6 +32,13 @@ public class Post extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Scrap> scrapList;
 
 
     public static Post toAdd(PostRequest postRequest, int type, User user) {
