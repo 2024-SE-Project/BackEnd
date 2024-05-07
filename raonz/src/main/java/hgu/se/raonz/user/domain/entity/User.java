@@ -1,6 +1,7 @@
 package hgu.se.raonz.user.domain.entity;
 
 import hgu.se.raonz.comment.domain.entity.Comment;
+import hgu.se.raonz.commentlike.domain.entity.CommentLike;
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.commons.security.Authority;
 import hgu.se.raonz.post.domain.entity.Post;
@@ -40,6 +41,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Scrap> scrapList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentLike> commentLikeList;
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

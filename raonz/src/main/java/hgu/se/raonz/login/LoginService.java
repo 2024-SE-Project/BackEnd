@@ -54,7 +54,7 @@ public class LoginService {
 
         if(optionalUser.isEmpty()) {
             user = User.builder()
-                    .userId(googleUser.getId())
+                    .id(googleUser.getId())
                     .name(googleUser.getName())
                     .email(googleUser.getEmail())
                     .build();

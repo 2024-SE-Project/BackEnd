@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests()
-                // 회원가입과 로그인은 모두 승인
-                .requestMatchers("/").permitAll()
+                .requestMatchers("/comment/**").permitAll()
+                .requestMatchers("/like/**").permitAll()
                 // /admin으로 시작하는 요청은 ADMIN 권한이 있는 유저에게만 허용
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // /user 로 시작하는 요청은 USER 권한이 있는 유저에게만 허용
@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/faq/delete/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/faq/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/faq/get/**").permitAll() //.hasRole("MANAGER")
-                .requestMatchers("/comment/**").permitAll()
+
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
                 .requestMatchers("/star/**").permitAll()
@@ -68,6 +68,7 @@ public class SecurityConfig {
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
                         (request, response, accessDeniedException) -> {
                             // 권한 문제가 발생했을 때 이 부분을 호출한다.
+
 
                             response.setStatus(403);
                             response.setCharacterEncoding("utf-8");
