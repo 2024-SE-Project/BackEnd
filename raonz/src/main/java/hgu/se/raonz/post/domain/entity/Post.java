@@ -33,11 +33,12 @@ public class Post extends BaseEntity {
     private User user;
 
 
-    public static Post toAdd(PostRequest postRequest, int type) {
+    public static Post toAdd(PostRequest postRequest, int type, User user) {
         return Post.builder()
                 .title(postRequest.getTitle())
                 .content(postRequest.getContent())
                 .type(type)
+                .user(user)
                 .build();
     }
 

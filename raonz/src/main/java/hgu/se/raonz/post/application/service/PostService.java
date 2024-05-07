@@ -5,6 +5,8 @@ import hgu.se.raonz.post.domain.repository.PostRepository;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
 import hgu.se.raonz.post.presentation.response.PostResponse;
+import hgu.se.raonz.user.domain.entity.User;
+import hgu.se.raonz.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public Post addPost(PostRequest postRequest, int type) {
-        Post post = Post.toAdd(postRequest, type);
+    public Post addPost(PostRequest postRequest, int type, String userId) {
+        List<User> userList = userRepository.findUserListByUserId(userId);
+        if (userList.size() != 1) {
+            System.out.println(userId);
+            System.out.println("userList size = " + userList.size() + "Duplicate email");
+//            return null;
+        }
+        Post post = Post.toAdd(postRequest, type, userList.get(0));
 
         postRepository.save(post);
 
@@ -29,10 +38,15 @@ public class PostService {
     }
 
     @Transactional
-    public Long deletePost(Long postId) {
+    public Long deletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId).orElse(null);
+        List<User> userList = userRepository.findUserListByUserId(userId);
 
         if(post != null) {
+            if (!post.getUser().getUserId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
+                System.out.println(userId);
+                return null;
+            }
             Long returnId = post.getPostId();
             postRepository.delete(post);
 
@@ -43,10 +57,14 @@ public class PostService {
     }
 
     @Transactional
-    public Long updatePost(Long postId, PostUpdateRequest postUpdateRequest) {
+    public Long updatePost(Long postId, PostUpdateRequest postUpdateRequest, String userId) {
         Post post = postRepository.findById(postId).orElse(null);
 
         if(post != null) {
+            if (!post.getUser().getUserId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
+                System.out.println(userId);
+                return null;
+            }
             post.setTitle(postUpdateRequest.getTitle());
             post.setContent(postUpdateRequest.getContent());
             postRepository.save(post);
