@@ -3,7 +3,6 @@ package hgu.se.raonz.post.presentation.controller;
 import hgu.se.raonz.commons.jwt.JWTProvider;
 import hgu.se.raonz.post.application.service.PostService;
 import hgu.se.raonz.post.domain.entity.Post;
-import hgu.se.raonz.post.domain.repository.PostRepository;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
 import hgu.se.raonz.post.presentation.response.PostResponse;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -39,7 +37,7 @@ public class PostController {
 
         System.out.println(email);
 
-        return ResponseEntity.ok(post.getPostId());
+        return ResponseEntity.ok(post.getId());
     }
 
     @DeleteMapping({"/post/delete/{postId}", "/material/delete/{postId}", "/faq/delete/{postId}"}) // 삭제

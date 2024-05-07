@@ -20,9 +20,8 @@ public class LoginController {
     }
 
     @ResponseBody
-    @GetMapping(value = "api/v1/oauth2/google") // 여기서 로그인 및 회원가입 여부 확인을 해야함
+    @GetMapping(value = "/api/v1/oauth2/google") // 여기서 로그인 및 회원가입 여부 확인을 해야함
     public ResponseEntity<UserResponse> callback (@RequestParam(value = "code") String code) throws IOException {
-        System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :"+ code);
 
         GoogleUser googleResponse = loginService.googleLogin(code);
 

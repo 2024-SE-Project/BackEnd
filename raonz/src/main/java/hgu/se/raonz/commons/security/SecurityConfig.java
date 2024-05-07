@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .requestMatchers("/test/**").permitAll()
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
+                .requestMatchers("/star/**").permitAll()
                 .anyRequest().denyAll().and()
                 .oauth2Login(oauth2 -> oauth2
                         .loginProcessingUrl("api/v1/oauth2/*")
@@ -67,7 +68,7 @@ public class SecurityConfig {
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
                         (request, response, accessDeniedException) -> {
                             // 권한 문제가 발생했을 때 이 부분을 호출한다.
-                            System.out.println("!@#!@#!@#");
+
                             response.setStatus(403);
                             response.setCharacterEncoding("utf-8");
                             response.setContentType("text/html; charset=UTF-8");

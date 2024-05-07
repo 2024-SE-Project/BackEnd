@@ -8,7 +8,6 @@ import hgu.se.raonz.post.presentation.response.PostResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +32,7 @@ public class PostService {
         Post post = postRepository.findById(postId).orElse(null);
 
         if(post != null) {
-            Long returnId = post.getPostId();
+            Long returnId = post.getId();
             postRepository.delete(post);
 
             return returnId;
@@ -51,7 +50,7 @@ public class PostService {
             post.setContent(postUpdateRequest.getContent());
             postRepository.save(post);
 
-            return post.getPostId();
+            return post.getId();
         }
 
         return null;
@@ -69,7 +68,7 @@ public class PostService {
     public List<PostResponse> getPostResponseList(int index, int type) {
         index--; // index == pageNum-1
         List<Post> postList = postRepository.findPostListByType(type);
-        postList.sort(Comparator.comparing(Post::getPostId).reversed());
+        postList.sort(Comparator.comparing(Post::getId).reversed());
         List<PostResponse> postResponseList = new ArrayList<>();
         for (int i = index*10; i < index*10 + 10 && i < postList.size(); i++) {
             postResponseList.add(PostResponse.toResponse(postList.get(i)));

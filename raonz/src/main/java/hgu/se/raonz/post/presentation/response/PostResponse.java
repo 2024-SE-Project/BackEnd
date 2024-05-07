@@ -2,11 +2,7 @@ package hgu.se.raonz.post.presentation.response;
 
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.user.domain.entity.User;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +21,7 @@ public class PostResponse {
     public static PostResponse toResponse(Post post) {
         System.out.println("=====>4");
         return PostResponse.builder()
-                .postId(post.getPostId())
+                .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .type(post.getType())

@@ -19,7 +19,7 @@ public class UserResponse {
     public static UserResponse toResponse(User user, String token) {
         return UserResponse.builder()
                 .name(user.getName())
-                .userId(user.getUserId())
+                .userId(user.getId())
                 .email(user.getEmail())
                 .token(token)
                 .build();
