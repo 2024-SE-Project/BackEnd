@@ -26,6 +26,7 @@ public class ScrapService {
         Post post = postRepository.findById(postId).orElse(null);
 
         if(user != null && post != null) {
+            if(scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null) return null;
             Scrap scrap = scrapRepository.save(Scrap.toAdd(user, post));
 
             return scrap.getId();
