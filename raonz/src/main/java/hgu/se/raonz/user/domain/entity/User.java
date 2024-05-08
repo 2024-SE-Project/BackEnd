@@ -29,6 +29,7 @@ public class User extends BaseEntity {
     private Long studentId;
 
     private String email;
+    private String phoneNumber;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Post post;

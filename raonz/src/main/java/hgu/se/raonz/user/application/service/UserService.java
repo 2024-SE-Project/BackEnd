@@ -2,14 +2,20 @@ package hgu.se.raonz.user.application.service;
 
 
 import hgu.se.raonz.commons.security.Authority;
+import hgu.se.raonz.post.domain.entity.Post;
+import hgu.se.raonz.post.presentation.response.PostResponse;
+import hgu.se.raonz.user.application.dto.UserDto;
+import hgu.se.raonz.user.application.dto.UserInfoDto;
 import hgu.se.raonz.user.domain.entity.User;
 import hgu.se.raonz.user.domain.repository.UserRepository;
 import hgu.se.raonz.user.presentation.request.UserRequest;
+import hgu.se.raonz.user.presentation.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +30,36 @@ public class UserService {
         userRepository.save(user);
 
         return user;
+    }
+
+    @Transactional
+    public String updateUser(String userId, UserRequest userRequest) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        System.out.println("Success to find User");
+        user.setEmail(userRequest.getEmail());
+        user.setName(userRequest.getName());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
+        user.setStudentId(userRequest.getStudentId());
+        return userId;
+    }
+
+    @Transactional
+    public UserDto getUserDto(String userId) {
+        List<User> userList = userRepository.findUserListByUserId(userId);
+        if (userList.size() != 1) {
+            System.out.println("userList size = " + userList.size());
+            return null;
+        }
+        System.out.println("Success to find User");
+        return UserDto.toResponse(userList.get(0));
+    }
+
+    @Transactional
+    public UserInfoDto getUserInfoDto(String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        System.out.println("Success to find User");
+        return UserInfoDto.toResponse(user);
     }
 }
