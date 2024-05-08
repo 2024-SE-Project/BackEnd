@@ -60,6 +60,8 @@ public class SecurityConfig {
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
                 .requestMatchers("/star/**").permitAll()
+                .requestMatchers("/mypage/**").permitAll()
+                .requestMatchers("/mypage/update/**").permitAll()
                 .anyRequest().denyAll().and()
                 .oauth2Login(oauth2 -> oauth2
                         .loginProcessingUrl("api/v1/oauth2/*")
