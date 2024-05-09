@@ -4,6 +4,12 @@ package hgu.se.raonz.user.application.service;
 import hgu.se.raonz.commons.security.Authority;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.presentation.response.PostResponse;
+import hgu.se.raonz.postLike.application.dto.PostLikeDto;
+import hgu.se.raonz.postLike.domain.entity.PostLike;
+import hgu.se.raonz.postLike.domain.repository.PostLikeRepository;
+import hgu.se.raonz.scrap.application.dto.ScrapDto;
+import hgu.se.raonz.scrap.domain.entity.Scrap;
+import hgu.se.raonz.scrap.domain.repository.ScrapRepository;
 import hgu.se.raonz.user.application.dto.UserDto;
 import hgu.se.raonz.user.application.dto.UserInfoDto;
 import hgu.se.raonz.user.domain.entity.User;
@@ -21,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ScrapRepository scrapRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public User addUser(UserRequest userRequest) {
@@ -56,10 +64,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfoDto getUserInfoDto(String userId) {
+    public UserInfoDto getUserInfoDto(String userId, List<ScrapDto> scrapDtoList, List<PostLikeDto> postLikeDtoList) {
         User user = userRepository.findById(userId).orElse(null);
+        List<PostLike> postLikeList = postLikeRepository.findPostLikeByUserId(userId);
+
         if (user == null) return null;
         System.out.println("Success to find User");
-        return UserInfoDto.toResponse(user);
+        return UserInfoDto.toResponse(user, scrapDtoList, postLikeDtoList);
     }
 }
