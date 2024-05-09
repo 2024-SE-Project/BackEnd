@@ -2,6 +2,7 @@ package hgu.se.raonz.post.presentation.response;
 
 import hgu.se.raonz.comment.application.dto.CommentDto;
 import hgu.se.raonz.post.domain.entity.Post;
+import hgu.se.raonz.user.application.dto.UserDto;
 import hgu.se.raonz.user.domain.entity.User;
 import lombok.*;
 
@@ -19,7 +20,7 @@ public class PostResponse {
     private String content;
     //    private String fileAddressList;
     private int type;
-    private User user;
+    private UserDto userDto;
     private List<CommentDto> commentList;
 
     public static PostResponse toResponse(Post post) {
@@ -29,18 +30,8 @@ public class PostResponse {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .type(post.getType())
-                .user(post.getUser())
+                .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
-                .build();
-    }
-
-    public static PostResponse toListResponse(Post post) {
-        return PostResponse.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .type(post.getType())
-                .user(post.getUser())
                 .build();
     }
 }
