@@ -14,5 +14,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("select r from User r where r.id = :userId")
     List<User> findUserListByUserId(String userId);
 
-    List<Scrap> findScrapListByUserId(String userId);
 }
