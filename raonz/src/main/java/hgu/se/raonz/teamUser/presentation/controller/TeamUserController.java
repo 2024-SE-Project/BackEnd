@@ -38,4 +38,18 @@ public class TeamUserController {
 
         return ResponseEntity.ok(teamUserIdList);
     }
+
+    @DeleteMapping("/team-user/delete/{teamId}") // 삭제
+    public ResponseEntity<List<Long>> deleteTeamUser(@PathVariable Long teamId, @RequestBody TeamUserRequest teamUserRequest, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+        // 팀장인지 확인
+        if (!teamService.isLeader(teamId, user_id)) {
+            System.out.println("Only Team Leader can add members");
+            return null;
+        }
+        List<Long> returnIdList = teamUserService.deleteTeamUser(teamId, teamUserRequest.getEmailList());
+
+        return ResponseEntity.ok(returnIdList);
+    }
 }

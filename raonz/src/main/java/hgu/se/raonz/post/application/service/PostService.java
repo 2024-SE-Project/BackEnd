@@ -28,13 +28,13 @@ public class PostService {
 
     @Transactional
     public Post addPost(PostRequest postRequest, int type, String userId) {
-        List<User> userList = userRepository.findUserListByUserId(userId);
-        if (userList.size() != 1) {
+        User user = userRepository.findUserByUserId(userId);
+        if (user == null) {
             System.out.println(userId);
-            System.out.println("userList size = " + userList.size() + "Duplicate email");
-//            return null;
+            System.out.println("user is null");
+            return null;
         }
-        Post post = Post.toAdd(postRequest, type, userList.get(0));
+        Post post = Post.toAdd(postRequest, type, user);
 
         postRepository.save(post);
 
@@ -44,20 +44,16 @@ public class PostService {
     @Transactional
     public Long deletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId).orElse(null);
-        List<User> userList = userRepository.findUserListByUserId(userId);
 
-        if(post != null) {
-            if (!post.getUser().getId().equals(userId)) { // 나중에 팀 클래스 생기면 수정 필요
-                System.out.println(userId);
-                return null;
-            }
-            Long returnId = post.getId();
-            postRepository.delete(post);
-
-            return returnId;
+        if (post == null) return null;
+        if (!post.getUser().getId().equals(userId)) {
+            System.out.println(userId);
+            return null;
         }
+        Long returnId = post.getId();
+        postRepository.delete(post);
 
-        return null;
+        return returnId;
     }
 
     @Transactional

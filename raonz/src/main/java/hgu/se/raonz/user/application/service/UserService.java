@@ -54,13 +54,11 @@ public class UserService {
 
     @Transactional
     public UserDto getUserDto(String userId) {
-        List<User> userList = userRepository.findUserListByUserId(userId);
-        if (userList.size() != 1) {
-            System.out.println("userList size = " + userList.size());
-            return null;
-        }
+        User user = userRepository.findUserByUserId(userId);
+        if (user == null) return null;
+
         System.out.println("Success to find User");
-        return UserDto.toResponse(userList.get(0));
+        return UserDto.toResponse(user);
     }
 
     @Transactional

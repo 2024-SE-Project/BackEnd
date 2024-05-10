@@ -38,5 +38,20 @@ public class TeamUserService {
         return teamUserIdList;
     }
 
+    @Transactional
+    public List<Long> deleteTeamUser(Long teamId, String emailList) {
+        String[] emailListSplitByComma = emailList.split(",");
+        List<Long> returnIdList = new ArrayList<>();
+        for (String s : emailListSplitByComma) {
+            TeamUser teamUser = teamUserRepository.findTeamUserByEmailAndTeamId(s, teamId);
+            if (teamUser == null) continue;
+            returnIdList.add(teamUser.getId());
+            teamUserRepository.delete(teamUser);
+        }
+
+        return returnIdList;
+    }
+
+
 
 }
