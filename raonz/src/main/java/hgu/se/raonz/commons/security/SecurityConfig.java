@@ -62,6 +62,11 @@ public class SecurityConfig {
                 .requestMatchers("/star/**").permitAll()
                 .requestMatchers("/mypage/**").permitAll()
                 .requestMatchers("/mypage/update/**").permitAll()
+                .requestMatchers("/team/add/**").permitAll()
+                .requestMatchers("/team/update/**").permitAll()
+                .requestMatchers("/team/delete/**").permitAll()
+                .requestMatchers("/team-user/add/**").permitAll()
+                .requestMatchers("/team-user/delete/**").permitAll()
                 .anyRequest().denyAll().and()
                 .oauth2Login(oauth2 -> oauth2
                         .loginProcessingUrl("api/v1/oauth2/*")
