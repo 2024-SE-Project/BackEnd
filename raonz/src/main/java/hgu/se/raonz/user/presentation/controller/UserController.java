@@ -41,7 +41,7 @@ public class UserController {
         String token = jwtProvider.resolveToken(request);
         String userId = jwtProvider.getAccount(token);
         List<ScrapDto> scrapDtoList = scrapService.getAllScrap(userId);
-        List<PostLikeDto> postLikeDtoList = postLikeService.getAllScrap(userId);
+        List<PostLikeDto> postLikeDtoList = postLikeService.getAllPostLike(userId);
         UserInfoDto userInfoDto = userService.getUserInfoDto(userId, scrapDtoList, postLikeDtoList);
 
 

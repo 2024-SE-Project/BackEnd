@@ -58,4 +58,9 @@ public class ScrapService {
 
         return scrapList.stream().map(ScrapDto::toResponse).toList();
     }
+
+    @Transactional
+    public boolean isScrap(String userId, Long postId) {
+        return scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
+    }
 }
