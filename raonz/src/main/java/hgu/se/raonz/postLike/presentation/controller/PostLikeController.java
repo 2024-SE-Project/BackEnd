@@ -46,7 +46,7 @@ public class PostLikeController {
         String token = jwtProvider.resolveToken(request);
         String uid = jwtProvider.getAccount(token);
 
-        List<PostLikeDto> postLikeDtoList = postLikeService.getAllScrap(uid);
+        List<PostLikeDto> postLikeDtoList = postLikeService.getAllPostLike(uid);
         List<PostLikeResponse> postLikeResponseList = postLikeDtoList.stream().map(PostLikeResponse::toResponse).toList();
 
         return ResponseEntity.ok(postLikeResponseList);

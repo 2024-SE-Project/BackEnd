@@ -22,8 +22,10 @@ public class PostResponse {
     private int type;
     private UserDto userDto;
     private List<CommentDto> commentList;
+    private boolean isLike;
+    private boolean isScraped;
 
-    public static PostResponse toResponse(Post post) {
+    public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
         System.out.println("=====>4");
         return PostResponse.builder()
                 .postId(post.getId())
@@ -32,6 +34,8 @@ public class PostResponse {
                 .type(post.getType())
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
+                .isLike(isLike)
+                .isScraped(isScraped)
                 .build();
     }
 }

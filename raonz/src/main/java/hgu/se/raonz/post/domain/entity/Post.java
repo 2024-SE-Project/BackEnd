@@ -30,6 +30,8 @@ public class Post extends BaseEntity {
 //    private String fileAddressList;
     private int type;
 
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

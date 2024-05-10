@@ -6,10 +6,15 @@ import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
 import hgu.se.raonz.post.presentation.response.PostResponse;
+import hgu.se.raonz.postLike.application.dto.PostLikeDto;
+import hgu.se.raonz.postLike.application.service.PostLikeService;
+import hgu.se.raonz.postLike.domain.entity.PostLike;
+import hgu.se.raonz.scrap.application.service.ScrapService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final PostLikeService postLikeService;
+    private final ScrapService scrapService;
     private final JWTProvider jwtProvider;
 
     public int getTypeByPath(String path) {
@@ -30,6 +37,7 @@ public class PostController {
 
     @PostMapping({"/post/add", "/material/add", "/faq/add"})
     public ResponseEntity<Long> addPost(@RequestBody PostRequest postRequest, HttpServletRequest request) {
+        List<String> files = postRequest.getFileList();
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
 
@@ -60,16 +68,20 @@ public class PostController {
     }
 
     @GetMapping({"/post/get/{id}", "/material/get/{id}", "/faq/get/{id}"})
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
-        PostResponse postResponse = postService.getPostResponse(id);
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+        PostResponse postResponse = postService.getPostResponse(id, user_id);
 
         return ResponseEntity.ok(postResponse);
     }
 
     @GetMapping({"/post/get/all/{index}", "/material/get/all/{index}", "/faq/get/all/{index}"})
     public ResponseEntity<List<PostResponse>> getPostAll(@PathVariable int index, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
         // Return the top 10 posts with the highest postId among posts with 1 post type in the order of highest order
-        List<PostResponse> postResponseList = postService.getPostResponseList(index, getTypeByPath(request.getServletPath()));
+        List<PostResponse> postResponseList = postService.getPostResponseList(index, getTypeByPath(request.getServletPath()), user_id);
 
         return ResponseEntity.ok(postResponseList);
     }

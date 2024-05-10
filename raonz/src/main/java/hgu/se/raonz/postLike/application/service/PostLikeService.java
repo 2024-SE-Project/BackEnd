@@ -51,9 +51,13 @@ public class PostLikeService {
     }
 
     @Transactional
-    public List<PostLikeDto> getAllScrap(String userId) {
+    public List<PostLikeDto> getAllPostLike(String userId) {
         List<PostLike> postLikeList = postLikeRepository.findPostLikeByUserId(userId);
 
         return postLikeList.stream().map(PostLikeDto::toResponse).toList();
+    }
+    @Transactional
+    public boolean isPostLike(String userId, Long postId) {
+        return postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId) != null;
     }
 }
