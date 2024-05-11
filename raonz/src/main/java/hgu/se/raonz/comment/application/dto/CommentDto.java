@@ -11,11 +11,13 @@ import lombok.*;
 public class CommentDto {
     private String contents;
     private Long id;
+    private String name;
 
     public static CommentDto toDto(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .contents(comment.getContents())
+                .name(comment.getUser().getName())
                 .build();
     }
 }

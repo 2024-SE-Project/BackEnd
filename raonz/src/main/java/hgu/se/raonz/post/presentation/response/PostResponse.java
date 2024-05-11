@@ -20,7 +20,9 @@ public class PostResponse {
     private String content;
     //    private String fileAddressList;
     private int type;
+
     private UserDto userDto;
+
     private List<CommentDto> commentList;
     private boolean isLike;
     private boolean isScraped;
@@ -32,10 +34,24 @@ public class PostResponse {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .type(post.getType())
+
+                .userDto(UserDto.toResponse(post.getUser()))
+                .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
+                .build();
+    }
+
+    public static PostResponse toListResponse(Post post) {
+        return PostResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .type(post.getType())
+                .user(UserDto.toResponse(post.getUser()))
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .isLike(isLike)
                 .isScraped(isScraped)
+
                 .build();
     }
 }
