@@ -26,6 +26,7 @@ public class ScrapService {
         Post post = postRepository.findById(postId).orElse(null);
 
         if(user != null && post != null) {
+            if(scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null) return null;
             Scrap scrap = scrapRepository.save(Scrap.toAdd(user, post));
 
             return scrap.getId();
@@ -56,5 +57,10 @@ public class ScrapService {
         List<Scrap> scrapList = scrapRepository.findScrapByUserId(userId);
 
         return scrapList.stream().map(ScrapDto::toResponse).toList();
+    }
+
+    @Transactional
+    public boolean isScrap(String userId, Long postId) {
+        return scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
     }
 }

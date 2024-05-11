@@ -10,4 +10,5 @@ public class UserRequest {
     private String userId;
     private String phoneNumber;
     private Long studentId;
+    private String email;
 }

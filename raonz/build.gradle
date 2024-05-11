@@ -36,6 +36,16 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+//	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
+//	implementation 'com.amazonaws:aws-java-sdk-s3'
+
+	// AWS SDK for Java - Core module
+	implementation 'com.amazonaws:aws-java-sdk-core:1.12.61'
+
+	// AWS SDK for Java - Amazon S3 module
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.61'
+
+
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
