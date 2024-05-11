@@ -20,17 +20,22 @@ public class PostResponse {
     private String content;
     //    private String fileAddressList;
     private int type;
-    private UserDto user;
-    private List<CommentDto> commentList;
 
-    public static PostResponse toResponse(Post post) {
+    private UserDto userDto;
+
+    private List<CommentDto> commentList;
+    private boolean isLike;
+    private boolean isScraped;
+
+    public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
         System.out.println("=====>4");
         return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .type(post.getType())
-                .user(UserDto.toResponse(post.getUser()))
+
+                .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .build();
     }
@@ -42,6 +47,11 @@ public class PostResponse {
                 .content(post.getContent())
                 .type(post.getType())
                 .user(UserDto.toResponse(post.getUser()))
+                .userDto(UserDto.toResponse(post.getUser()))
+                .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
+                .isLike(isLike)
+                .isScraped(isScraped)
+
                 .build();
     }
 }

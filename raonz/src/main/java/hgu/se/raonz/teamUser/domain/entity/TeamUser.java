@@ -1,6 +1,8 @@
-package hgu.se.raonz.postLike.domain.entity;
+package hgu.se.raonz.teamUser.domain.entity;
 
 import hgu.se.raonz.post.domain.entity.Post;
+import hgu.se.raonz.postLike.domain.entity.PostLike;
+import hgu.se.raonz.team.domain.entity.Team;
 import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,21 +13,20 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class PostLike {
+public class TeamUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private String userEmail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+    private Team team;
 
-    public static PostLike toAdd(User user, Post post) {
-        return PostLike.builder()
-                .user(user)
-                .post(post)
+    public static TeamUser toAdd(Team team, String email) {
+        return TeamUser.builder()
+                .userEmail(email)
+                .team(team)
                 .build();
     }
 }

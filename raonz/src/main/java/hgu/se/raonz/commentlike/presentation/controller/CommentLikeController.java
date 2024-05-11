@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
-public class CommentLikeController {
+public class    CommentLikeController {
     private final CommentLikeService commentLikeService;
     private final JWTProvider jwtProvider;
 
