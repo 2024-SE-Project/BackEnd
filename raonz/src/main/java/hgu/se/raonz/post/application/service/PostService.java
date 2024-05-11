@@ -1,19 +1,32 @@
 package hgu.se.raonz.post.application.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.GroupGrantee;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.Permission;
 import hgu.se.raonz.post.domain.entity.Post;
+import hgu.se.raonz.post.domain.entity.PostFile;
+import hgu.se.raonz.post.domain.repository.PostFileRepository;
 import hgu.se.raonz.post.domain.repository.PostRepository;
 import hgu.se.raonz.post.presentation.request.PostRequest;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
 import hgu.se.raonz.post.presentation.response.PostResponse;
+
 import hgu.se.raonz.postLike.domain.repository.PostLikeRepository;
 import hgu.se.raonz.scrap.domain.repository.ScrapRepository;
 import hgu.se.raonz.user.domain.entity.User;
 import hgu.se.raonz.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,24 +34,59 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+//    @Value("${cloud.accessKey}")
+//    private String accessKey;
+//
+//    @Value("${cloud.secretKey}")
+//    private String secretKey;
+//
+//    @Value("${cloud.endPoint}")
+//    private String endPoint;
+//
+//    @Value("${cloud.bucketName}")
+//    private String bucketName;
+//
+//    private final AmazonS3 amazonS3;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
+    private final PostFileRepository postFileRepository;
+
 
     @Transactional
-    public Post addPost(PostRequest postRequest, int type, String userId) {
+    public Long addPost(PostRequest postRequest, int type, String userId) {
         User user = userRepository.findUserByUserId(userId);
-        if (user == null) {
-            System.out.println(userId);
-            System.out.println("user is null");
-            return null;
-        }
+        if (user == null) return null;
+
         Post post = Post.toAdd(postRequest, type, user);
-
         postRepository.save(post);
+        System.out.println("save the post: " + post.getId() + post.getTitle() + post.getContent());
+        System.out.println("Uploading the post Files");
+        for (MultipartFile file: postRequest.getFileList()) {
+            try {
+                String objectName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//                ObjectMetadata objectMetadata = new ObjectMetadata();
+//                objectMetadata.setContentLength(file.getSize());
+//                objectMetadata.setContentType(file.getContentType());
+//                amazonS3.putObject(bucketName, objectName, file.getInputStream(), objectMetadata);
+//
+//                String uploadedImageUrl = String.format("%s/%s/%s", endPoint, bucketName, URLEncoder.encode(objectName, "UTF-8").replace("+", "%20"));
+//                AccessControlList accessControlList = amazonS3.getObjectAcl(bucketName, objectName);
+//                accessControlList.grantPermission(GroupGrantee.AllUsers, Permission.Read);
+//
+//                amazonS3.setObjectAcl(bucketName, objectName, accessControlList);
+                String uploadedImageUrl = objectName;
+                PostFile postFile = postFileRepository.save(PostFile.toAdd(post, uploadedImageUrl, objectName));
+                postFileRepository.save(postFile);
 
-        return post;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        postRepository.save(post);
+        return post.getId();
     }
 
     @Transactional

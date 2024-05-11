@@ -35,16 +35,14 @@ public class PostController {
     }
 
     @PostMapping({"/post/add", "/material/add", "/faq/add"})
-    public ResponseEntity<Long> addPost(@RequestBody PostRequest postRequest, HttpServletRequest request) {
-        List<String> files = postRequest.getFileList();
+    public ResponseEntity<Long> addPost(@ModelAttribute PostRequest postRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
 
         System.out.println(user_id);
 
-        Post post = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
-
-        return ResponseEntity.ok(post.getId());
+        Long postId = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
+        return ResponseEntity.ok(postId);
     }
 
     @DeleteMapping({"/post/delete/{postId}", "/material/delete/{postId}", "/faq/delete/{postId}"}) // 삭제

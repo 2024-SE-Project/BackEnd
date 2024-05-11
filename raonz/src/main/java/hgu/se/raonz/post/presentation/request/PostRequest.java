@@ -3,6 +3,7 @@ package hgu.se.raonz.post.presentation.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ import java.util.List;
 public class PostRequest {
     private String title;
     private String content;
-    private List<String> fileList;
+    private List<MultipartFile> fileList;
 }
