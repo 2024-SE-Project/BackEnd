@@ -8,6 +8,7 @@ import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,7 +32,6 @@ public class Post extends BaseEntity {
     private int type;
 
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -42,6 +42,8 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Scrap> scrapList;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostFile> postFileList;
 
     public static Post toAdd(PostRequest postRequest, int type, User user) {
         return Post.builder()
