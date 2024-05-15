@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -40,8 +41,8 @@ public class PostController {
         String user_id = jwtProvider.getAccount(token);
 
         System.out.println(user_id);
-
         Long postId = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
+
         return ResponseEntity.ok(postId);
     }
 
