@@ -4,6 +4,7 @@ package hgu.se.raonz.post.application.service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
+import hgu.se.raonz.post.application.dto.PostFileDto;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.domain.entity.PostFile;
 import hgu.se.raonz.post.domain.repository.PostFileRepository;
@@ -80,7 +81,7 @@ public class PostService {
                 Blob blob = bucket.create(objectName, file.getInputStream(), file.getContentType());
 
                 // 업로드된 객체의 url 만들기
-                String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName + "?authuser=2";
+                String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName;
 
                 PostFile postFile = postFileRepository.save(PostFile.toAdd(post, uploadedImageUrl, objectName));
                 postFileRepository.save(postFile);
@@ -139,6 +140,7 @@ public class PostService {
         System.out.println("Success to find Post");
         boolean isPostLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId) != null;
         boolean isScrap = scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
+
         return PostResponse.toResponse(post, isPostLike, isScrap);
     }
 
