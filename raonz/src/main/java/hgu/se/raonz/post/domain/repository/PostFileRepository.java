@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface PostFileRepository extends JpaRepository<PostFile, Long> {
 
+    @Query("select r from PostFile r where r.post.id = :postId")
+    List<PostFile> findByPostId(@Param("postId") Long postId);
 }

@@ -45,6 +45,8 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
     private final PostFileRepository postFileRepository;
+    InputStream keyFile;
+    Storage storage;
 
 
     @Transactional
@@ -56,8 +58,7 @@ public class PostService {
         postRepository.save(post);
         System.out.println("save the post: " + post.getId() + post.getTitle() + post.getContent());
         System.out.println("Uploading the post Files");
-        InputStream keyFile;
-        Storage storage;
+
         try {
 //            keyFile = new FileInputStream(keyFileName);
             keyFile = ResourceUtils.getURL(keyFileName).openStream();
@@ -108,7 +109,44 @@ public class PostService {
             System.out.println(userId);
             return null;
         }
+        // Get the files associated with the post
+        List<PostFile> postFiles = postFileRepository.findByPostId(postId);
+
+        try {
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        // Delete the files from the bucket
+        for (PostFile postFile : postFiles) {
+            try {
+                BlobId blobId = BlobId.of(bucketName, postFile.getObjectName());
+                boolean deleted = storage.delete(blobId);
+                if (deleted) {
+                    System.out.println("Deleted file from bucket: " + postFile.getObjectName());
+                } else {
+                    System.out.println("Failed to delete file from bucket: " + postFile.getObjectName());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        // Close the key file stream
+        try {
+            keyFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         Long returnId = post.getId();
+        // Delete the post and associated files from the database
+        postFileRepository.deleteAll(postFiles);
         postRepository.delete(post);
 
         return returnId;
