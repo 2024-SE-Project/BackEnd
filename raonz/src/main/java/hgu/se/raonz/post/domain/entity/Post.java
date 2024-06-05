@@ -30,8 +30,8 @@ public class Post extends BaseEntity {
     private String content;
 //    private String fileAddressList;
     private int type;
-
-
+    
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -41,6 +41,9 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Scrap> scrapList;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikeList;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostFile> postFileList;

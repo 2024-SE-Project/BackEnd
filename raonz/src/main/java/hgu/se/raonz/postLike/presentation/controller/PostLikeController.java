@@ -31,12 +31,12 @@ public class PostLikeController {
         return ResponseEntity.ok(scrapId);
     }
 
-    @DeleteMapping("/like/delete/{postLikId}")
-    public ResponseEntity<Long> deletePostLike(@PathVariable Long postLikId, HttpServletRequest request) {
+    @DeleteMapping("/like/delete/{pid}") // post Id 로 구현하는게 좋을듯
+    public ResponseEntity<Long> deletePostLike(@PathVariable Long pid, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String uid = jwtProvider.getAccount(token);
 
-        Long returnId = postLikeService.deletePostLike(postLikId, uid);
+        Long returnId = postLikeService.deletePostLike(pid, uid);
 
         return ResponseEntity.ok(returnId);
     }
