@@ -70,7 +70,7 @@ public class SecurityConfig {
 
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
-                .requestMatchers("/star/**").permitAll()
+                .requestMatchers("/scrape/**").permitAll()
                 .requestMatchers("/mypage/**").permitAll()
                 .requestMatchers("/mypage/update/**").permitAll()
                 .requestMatchers("/team/add/**").permitAll()

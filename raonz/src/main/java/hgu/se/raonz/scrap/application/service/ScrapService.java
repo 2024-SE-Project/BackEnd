@@ -37,8 +37,8 @@ public class ScrapService {
     }
 
     @Transactional
-    public Long deleteScrap(Long scrapId, String userId) {
-        Scrap scrap = scrapRepository.findById(scrapId).orElse(null);
+    public Long deleteScrap(Long postId, String userId) {
+        Scrap scrap = scrapRepository.findScrapByUserIdAndPostId(userId, postId);
 
         if(scrap == null) {
             return null;
@@ -46,7 +46,7 @@ public class ScrapService {
 
         if(scrap.getUser().getId().equals(userId)) {
             scrapRepository.delete(scrap);
-            return scrapId;
+            return scrap.getId();
         }
 
         return null;
