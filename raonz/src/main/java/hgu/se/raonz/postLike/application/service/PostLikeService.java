@@ -37,7 +37,7 @@ public class PostLikeService {
     @Transactional
     public Long deletePostLike(Long postId, String userId) {
         Post post = postRepository.findById(postId).orElse(null);
-        PostLike postLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId).orElse(null);
+        PostLike postLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId);
 
         if(postLike == null) {
             return null;
@@ -45,7 +45,7 @@ public class PostLikeService {
 
         if(postLike.getUser().getId().equals(userId)) {
             postLikeRepository.delete(postLike);
-            return postLikeId;
+            return postLike.getId();
         }
 
         return null;

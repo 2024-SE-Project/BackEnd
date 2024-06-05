@@ -3,6 +3,7 @@ package hgu.se.raonz.post.domain.entity;
 import hgu.se.raonz.comment.domain.entity.Comment;
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.post.presentation.request.PostRequest;
+import hgu.se.raonz.postLike.domain.entity.PostLike;
 import hgu.se.raonz.scrap.domain.entity.Scrap;
 import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
