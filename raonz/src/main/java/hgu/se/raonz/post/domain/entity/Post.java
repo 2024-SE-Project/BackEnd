@@ -60,6 +60,9 @@ public class Post extends BaseEntity {
                 .user(user)
                 .build();
     }
+    public int getLikeCount() {
+        return postLikeList.size();
+    }
 
 
 

@@ -4,6 +4,7 @@ package hgu.se.raonz.post.application.service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
+import hgu.se.raonz.post.application.dto.PostDto;
 import hgu.se.raonz.post.application.dto.PostFileDto;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.domain.entity.PostFile;
@@ -15,6 +16,10 @@ import hgu.se.raonz.post.presentation.response.PostResponse;
 
 import hgu.se.raonz.postLike.domain.repository.PostLikeRepository;
 import hgu.se.raonz.scrap.domain.repository.ScrapRepository;
+import hgu.se.raonz.team.domain.entity.Team;
+import hgu.se.raonz.team.presentation.response.TeamRankResponse;
+import hgu.se.raonz.team.presentation.response.TeamResponse;
+import hgu.se.raonz.teamUser.domain.entity.TeamUser;
 import hgu.se.raonz.user.domain.entity.User;
 import hgu.se.raonz.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -207,5 +212,20 @@ public class PostService {
         List<Post> postList = postRepository.findPostListByUserId(userId);
 
         return postList.stream().map(PostResponse::toResponse).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<PostDto> getRankLikePostResponseList() {
+        List<Post> postList = postRepository.findAll();
+        List<PostDto> postDtoList = new ArrayList<>();
+        postList.sort(Comparator.comparing(Post::getLikeCount).reversed());
+
+        int size = postDtoList.size();
+        if (size > 10) size = 10;
+        // top 10
+        for (int i = 0; i < size ; i++) {
+            postDtoList.add(PostDto.toResponse(postList.get(i)));
+        }
+        return postDtoList;
     }
 }
