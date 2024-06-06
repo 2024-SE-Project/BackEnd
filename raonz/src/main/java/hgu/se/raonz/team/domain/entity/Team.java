@@ -22,6 +22,7 @@ public class Team {
     private Long id;
 
     private String name;
+    private String content;
     private String leaderId;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
@@ -30,9 +31,10 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<TeamUser> teamUserList;
 
-    public static Team toAdd(String teamName, String userId) {
+    public static Team toAdd(TeamRequest teamRequest, String userId) {
         return Team.builder()
-                .name(teamName)
+                .name(teamRequest.getName())
+                .content(teamRequest.getContent())
                 .leaderId(userId)
                 .build();
     }

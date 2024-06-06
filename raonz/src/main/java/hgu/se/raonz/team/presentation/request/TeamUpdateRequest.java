@@ -9,5 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TeamUpdateRequest {
     private String name;
+    private String content;
     private String leaderId;
+    private String emailList;
 }

@@ -34,7 +34,7 @@ public class TeamService {
     @Transactional
     public Long addTeam(TeamRequest teamRequest, String userId) {
         System.out.println(teamRequest.getName() + ": " + userId);
-        Team team = teamRepository.save(Team.toAdd(teamRequest.getName(), userId));
+        Team team = teamRepository.save(Team.toAdd(teamRequest, userId));
 
         return team.getId();
     }
