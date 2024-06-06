@@ -168,9 +168,9 @@ public class TeamService {
 
         List <TeamRankResponse> teamRankResponseList = new ArrayList<>();
         int size = teamRankResponseList.size();
+        if (size > 10) size = 10;
         // top 10
-        for (int i = 0; i < 10 ; i++) {
-            if (i == size-1) break;
+        for (int i = 0; i < size ; i++) {
             teamRankResponseList.add(TeamRankResponse.toResponse(teamList.get(i)));
         }
         return teamRankResponseList;

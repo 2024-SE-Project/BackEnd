@@ -18,15 +18,19 @@ import java.util.List;
 public class TeamResponse {
     private Long id;
     private String name;
+    private String content;
     private String leaderId;
     private List<String> emailList;
+    private String imgURL;
 
     public static TeamResponse toResponse(Team team, List<String> emailList) {
         return TeamResponse.builder()
                 .id(team.getId())
                 .name(team.getName())
+                .content(team.getContent())
                 .leaderId(team.getLeaderId())
                 .emailList(emailList)
+                .imgURL(team.getImgURL())
                 .build();
     }
 }

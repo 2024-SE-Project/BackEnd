@@ -30,7 +30,7 @@ public class TeamUserService {
         List<Long> teamUserIdList = new ArrayList<>();
 
         for (String s : emailListSplitByComma) {
-            if (teamUserRepository.findTeamUserByEmailAndTeamId(s, teamId) != null) continue;
+            if (teamUserRepository.findTeamUserByEmailAndTeamId(s.trim(), teamId) != null) continue;
             TeamUser teamUser = teamUserRepository.save(TeamUser.toAdd(team, s));
             teamUserIdList.add(teamUser.getId());
         }

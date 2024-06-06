@@ -29,8 +29,8 @@ public class TeamController {
     private final JWTProvider jwtProvider;
 
 
-    @GetMapping("/team/add")
-    public ResponseEntity<Long> addTeam(@RequestBody TeamRequest teamRequest, HttpServletRequest request) {
+    @PostMapping("/team/add")
+    public ResponseEntity<Long> addTeam(@ModelAttribute TeamRequest teamRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
         Long teamId = teamService.addTeam(teamRequest, user_id);

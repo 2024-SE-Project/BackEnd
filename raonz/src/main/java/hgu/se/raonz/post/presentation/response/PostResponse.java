@@ -33,15 +33,11 @@ public class PostResponse {
     private boolean isScraped;
     private int likeCount;
     private int scrapeCount;
-    private String regDate;
             
     private List<PostFileDto> postFileDtoList;
 
     public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
         System.out.println("=====>4");
-        LocalDateTime regdate = post.getRegDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = regdate.format(formatter);
 
         return PostResponse.builder()
                 .postId(post.getId())
@@ -52,7 +48,6 @@ public class PostResponse {
                 .isScraped(isScraped)
                 .likeCount(post.getPostLikeList().size())
                 .scrapeCount(post.getScrapList().size())
-                .regDate(formattedDateTime)
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .postFileDtoList(post.getPostFileList().stream().map(PostFileDto::toDto).toList())
