@@ -62,12 +62,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfoDto getUserInfoDto(String userId, List<ScrapDto> scrapDtoList, List<PostLikeDto> postLikeDtoList) {
+    public UserInfoDto getUserInfoDto(String userId, List<ScrapDto> scrapDtoList, List<PostLikeDto> postLikeDtoList, List<PostResponse> postResponseList) {
         User user = userRepository.findById(userId).orElse(null);
         List<PostLike> postLikeList = postLikeRepository.findPostLikeByUserId(userId);
 
         if (user == null) return null;
         System.out.println("Success to find User");
-        return UserInfoDto.toResponse(user, scrapDtoList, postLikeDtoList);
+        return UserInfoDto.toResponse(user, scrapDtoList, postLikeDtoList, postResponseList);
     }
 }
