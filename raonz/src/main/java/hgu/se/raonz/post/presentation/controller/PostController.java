@@ -1,6 +1,7 @@
 package hgu.se.raonz.post.presentation.controller;
 
 import hgu.se.raonz.commons.jwt.JWTProvider;
+import hgu.se.raonz.post.application.dto.PostDto;
 import hgu.se.raonz.post.application.service.PostService;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.presentation.request.PostRequest;
@@ -82,6 +83,15 @@ public class PostController {
         String user_id = jwtProvider.getAccount(token);
         // Return the top 10 posts with the highest postId among posts with 1 post type in the order of highest order
         List<PostResponse> postResponseList = postService.getPostResponseList(index, getTypeByPath(request.getServletPath()), user_id);
+
+        return ResponseEntity.ok(postResponseList);
+    }
+
+    @GetMapping("/rank/like")
+    public ResponseEntity<List<PostResponse>> getRankStar(HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+        List<PostResponse> postResponseList = postService.getRankLikePostResponseList(user_id);
 
         return ResponseEntity.ok(postResponseList);
     }

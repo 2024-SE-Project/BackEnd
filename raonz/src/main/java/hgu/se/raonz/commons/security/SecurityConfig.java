@@ -69,6 +69,7 @@ public class SecurityConfig {
                 .requestMatchers("/match/get/**").permitAll() //.hasRole("MANAGER")
 
                 .requestMatchers("/rank/team/**").permitAll() //.hasRole("MANAGER")
+                .requestMatchers("/rank/like/**").permitAll() //.hasRole("MANAGER")
 
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
