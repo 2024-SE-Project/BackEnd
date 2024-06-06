@@ -73,7 +73,34 @@ public class UserController {
     public ResponseEntity<String> updateUserRc(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String userId = jwtProvider.getAccount(token);
-        User user = userService.updateRC(userRCUpdate.getRC(), userId);
+        User user = userService.updateRC(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/name/update")
+    public ResponseEntity<String> updateUserName(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updateName(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/email/update")
+    public ResponseEntity<String> updateUserEmail(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updateEmail(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/phone/update")
+    public ResponseEntity<String> updateUserPhone(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updatePhone(userRCUpdate.getValue(), userId);
 
         return ResponseEntity.ok(user.getId());
     }

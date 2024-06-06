@@ -8,5 +8,5 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class UserRCUpdate {
-    private String RC;
+    private String value;
 }

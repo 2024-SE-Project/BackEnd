@@ -84,4 +84,31 @@ public class UserService {
 
         return user;
     }
+
+    @Transactional
+    public User updateName(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setName(value);
+
+        return user;
+    }
+
+    @Transactional
+    public User updateEmail(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setEmail(value);
+
+        return user;
+    }
+
+    @Transactional
+    public User updatePhone(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setPhoneNumber(value);
+
+        return user;
+    }
 }
