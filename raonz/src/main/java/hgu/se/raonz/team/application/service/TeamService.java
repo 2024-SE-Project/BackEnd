@@ -10,6 +10,7 @@ import hgu.se.raonz.team.domain.entity.Team;
 import hgu.se.raonz.team.domain.repository.TeamRepository;
 import hgu.se.raonz.team.presentation.request.TeamRequest;
 import hgu.se.raonz.team.presentation.request.TeamUpdateRequest;
+import hgu.se.raonz.team.presentation.response.TeamRankResponse;
 import hgu.se.raonz.team.presentation.response.TeamResponse;
 import hgu.se.raonz.teamUser.domain.entity.TeamUser;
 import hgu.se.raonz.teamUser.domain.repository.TeamUserRepository;
@@ -119,6 +120,19 @@ public class TeamService {
         Team team = teamRepository.findTeamByTeamId(teamId);
         if (team == null) return false;
         return team.getLeaderId().equals(leaderId);
+    }
+
+    @Transactional
+    public List<TeamRankResponse> getTeamRankResponseList() {
+        List<Team> teamList = teamRepository.findAll();
+        teamList.sort(Comparator.comparing(Team::getTotalLikeCount).reversed());
+
+        List <TeamRankResponse> teamRankResponseList = new ArrayList<>();
+        // top 10
+        for (int i = 0; i < 10; i++) {
+            teamRankResponseList.add(TeamRankResponse.toResponse(teamList.get(i)));
+        }
+        return teamRankResponseList;
     }
 
 }

@@ -2,7 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.sonarqube' version '5.0.0.4638'
 }
+
 
 group = 'hgu.se'
 version = '0.0.1-SNAPSHOT'
@@ -44,6 +46,9 @@ dependencies {
 
 	// AWS SDK for Java - Amazon S3 module
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.61'
+
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 
 
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'

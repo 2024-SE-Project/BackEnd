@@ -19,7 +19,7 @@ public class ScrapController {
     private final ScrapService scrapService;
     private final JWTProvider jwtProvider;
 
-    @PostMapping("/star/add/{pid}")
+    @PostMapping("/scrape/add/{pid}")
     public ResponseEntity<Long> addScrap(@PathVariable Long pid, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String uid = jwtProvider.getAccount(token);
@@ -29,17 +29,17 @@ public class ScrapController {
         return ResponseEntity.ok(scrapId);
     }
 
-    @DeleteMapping("/star/delete/{scrapId}")
-    public ResponseEntity<Long> deleteScrap(@PathVariable Long scrapId, HttpServletRequest request) {
+    @DeleteMapping("/scrape/delete/{pid}")
+    public ResponseEntity<Long> deleteScrap(@PathVariable Long pid, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String uid = jwtProvider.getAccount(token);
 
-        Long returnId = scrapService.deleteScrap(scrapId, uid);
+        Long returnId = scrapService.deleteScrap(pid, uid);
 
         return ResponseEntity.ok(returnId);
     }
 
-    @GetMapping("/star/get")
+    @GetMapping("/scrape/get")
     public ResponseEntity<List<ScrapResponse>> getAllScrap(HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String uid = jwtProvider.getAccount(token);

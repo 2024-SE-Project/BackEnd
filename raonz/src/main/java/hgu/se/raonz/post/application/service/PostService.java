@@ -1,10 +1,10 @@
 package hgu.se.raonz.post.application.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AccessControlList;
-import com.amazonaws.services.s3.model.GroupGrantee;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.Permission;
+
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.*;
+import hgu.se.raonz.post.application.dto.PostFileDto;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.domain.entity.PostFile;
 import hgu.se.raonz.post.domain.repository.PostFileRepository;
@@ -22,38 +22,35 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import java.util.stream.Collectors;
+
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
-//    @Value("${cloud.accessKey}")
-//    private String accessKey;
-//
-//    @Value("${cloud.secretKey}")
-//    private String secretKey;
-//
-//    @Value("${cloud.endPoint}")
-//    private String endPoint;
-//
-//    @Value("${cloud.bucketName}")
-//    private String bucketName;
-//
-//    private final AmazonS3 amazonS3;
+    @Value("${spring.cloud.gcp.storage.credentials.location}")
+    private String keyFileName;
+    @Value("${spring.cloud.gcp.storage.bucket}") // application.yml에 써둔 bucket 이름
+    private String bucketName;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
     private final PostFileRepository postFileRepository;
+    InputStream keyFile;
+    Storage storage;
 
 
     @Transactional
@@ -65,26 +62,43 @@ public class PostService {
         postRepository.save(post);
         System.out.println("save the post: " + post.getId() + post.getTitle() + post.getContent());
         System.out.println("Uploading the post Files");
+
+        try {
+//            keyFile = new FileInputStream(keyFileName);
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
         for (MultipartFile file: postRequest.getFileList()) {
             try {
-                String objectName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-//                ObjectMetadata objectMetadata = new ObjectMetadata();
-//                objectMetadata.setContentLength(file.getSize());
-//                objectMetadata.setContentType(file.getContentType());
-//                amazonS3.putObject(bucketName, objectName, file.getInputStream(), objectMetadata);
-//
-//                String uploadedImageUrl = String.format("%s/%s/%s", endPoint, bucketName, URLEncoder.encode(objectName, "UTF-8").replace("+", "%20"));
-//                AccessControlList accessControlList = amazonS3.getObjectAcl(bucketName, objectName);
-//                accessControlList.grantPermission(GroupGrantee.AllUsers, Permission.Read);
-//
-//                amazonS3.setObjectAcl(bucketName, objectName, accessControlList);
-                String uploadedImageUrl = objectName;
+                String objectName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+                // 버킷 객체 가져오기
+                Bucket bucket = storage.get(bucketName);
+
+                // 객체 생성 및 업로드
+                Blob blob = bucket.create(objectName, file.getInputStream(), file.getContentType());
+
+                // 업로드된 객체의 url 만들기
+                String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName;
+
                 PostFile postFile = postFileRepository.save(PostFile.toAdd(post, uploadedImageUrl, objectName));
                 postFileRepository.save(postFile);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        }
+        try {
+            keyFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
         postRepository.save(post);
         return post.getId();
@@ -99,7 +113,44 @@ public class PostService {
             System.out.println(userId);
             return null;
         }
+        // Get the files associated with the post
+        List<PostFile> postFiles = postFileRepository.findByPostId(postId);
+
+        try {
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        // Delete the files from the bucket
+        for (PostFile postFile : postFiles) {
+            try {
+                BlobId blobId = BlobId.of(bucketName, postFile.getObjectName());
+                boolean deleted = storage.delete(blobId);
+                if (deleted) {
+                    System.out.println("Deleted file from bucket: " + postFile.getObjectName());
+                } else {
+                    System.out.println("Failed to delete file from bucket: " + postFile.getObjectName());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        // Close the key file stream
+        try {
+            keyFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         Long returnId = post.getId();
+        // Delete the post and associated files from the database
+        postFileRepository.deleteAll(postFiles);
         postRepository.delete(post);
 
         return returnId;
@@ -131,6 +182,7 @@ public class PostService {
         System.out.println("Success to find Post");
         boolean isPostLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId) != null;
         boolean isScrap = scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
+
         return PostResponse.toResponse(post, isPostLike, isScrap);
     }
 

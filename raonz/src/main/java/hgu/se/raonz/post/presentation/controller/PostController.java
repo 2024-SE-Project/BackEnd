@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,21 +32,23 @@ public class PostController {
         if (path.equals("post")) return 1;
         if (path.equals("material")) return 2;
         if (path.equals("faq")) return 3;
+        if (path.equals("match")) return 4;
+        
         return -1;
     }
 
-    @PostMapping({"/post/add", "/material/add", "/faq/add"})
+    @PostMapping({"/post/add", "/material/add", "/faq/add", "/match/add"})
     public ResponseEntity<Long> addPost(@ModelAttribute PostRequest postRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
 
         System.out.println(user_id);
-
         Long postId = postService.addPost(postRequest, getTypeByPath(request.getServletPath()), user_id);
+
         return ResponseEntity.ok(postId);
     }
 
-    @DeleteMapping({"/post/delete/{postId}", "/material/delete/{postId}", "/faq/delete/{postId}"}) // 삭제
+    @DeleteMapping({"/post/delete/{postId}", "/material/delete/{postId}", "/faq/delete/{postId}", "/match/delete/{postId}"}) // 삭제
     public ResponseEntity<Long> deletePost(@PathVariable Long postId, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
@@ -55,7 +58,7 @@ public class PostController {
         return ResponseEntity.ok(returnId);
     }
 
-    @PatchMapping({"/post/update/{postId}", "/material/update/{postId}", "/faq/update/{postId}"})
+    @PatchMapping({"/post/update/{postId}", "/material/update/{postId}", "/faq/update/{postId}", "/match/update/{postId}"})
     public ResponseEntity<Long> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
@@ -64,7 +67,7 @@ public class PostController {
         return ResponseEntity.ok(returnId);
     }
 
-    @GetMapping({"/post/get/{id}", "/material/get/{id}", "/faq/get/{id}"})
+    @GetMapping({"/post/get/{id}", "/material/get/{id}", "/faq/get/{id}", "/match/get/{id}"})
     public ResponseEntity<PostResponse> getPost(@PathVariable Long id, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
@@ -73,7 +76,7 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
 
-    @GetMapping({"/post/get/all/{index}", "/material/get/all/{index}", "/faq/get/all/{index}"})
+    @GetMapping({"/post/get/all/{index}", "/material/get/all/{index}", "/faq/get/all/{index}", "/match/get/all/{index}"})
     public ResponseEntity<List<PostResponse>> getPostAll(@PathVariable int index, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
@@ -82,4 +85,7 @@ public class PostController {
 
         return ResponseEntity.ok(postResponseList);
     }
+
+
+
 }

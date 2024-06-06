@@ -8,6 +8,7 @@ import hgu.se.raonz.team.application.service.TeamService;
 import hgu.se.raonz.team.domain.entity.Team;
 import hgu.se.raonz.team.presentation.request.TeamRequest;
 import hgu.se.raonz.team.presentation.request.TeamUpdateRequest;
+import hgu.se.raonz.team.presentation.response.TeamRankResponse;
 import hgu.se.raonz.team.presentation.response.TeamResponse;
 import hgu.se.raonz.teamUser.application.service.TeamUserService;
 import hgu.se.raonz.user.domain.entity.User;
@@ -87,6 +88,16 @@ public class TeamController {
         List<TeamResponse> teamResponseList = teamService.getMyTeamResponseList(user_id);
 
         return ResponseEntity.ok(teamResponseList);
+    }
+
+    @GetMapping({"/rank/team/"})
+    public ResponseEntity<List<TeamRankResponse>> getTeamRank(HttpServletRequest request) {
+//        String token = jwtProvider.resolveToken(request);
+//        String user_id = jwtProvider.getAccount(token);
+        // Return the top 10 posts with the highest postId among posts with 1 post type in the order of highest order
+        List<TeamRankResponse> teamRankResponseList = teamService.getTeamRankResponseList();
+
+        return ResponseEntity.ok(teamRankResponseList);
     }
 
 }

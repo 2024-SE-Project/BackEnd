@@ -3,7 +3,9 @@ package hgu.se.raonz.post.domain.entity;
 import hgu.se.raonz.comment.domain.entity.Comment;
 import hgu.se.raonz.commons.entity.BaseEntity;
 import hgu.se.raonz.post.presentation.request.PostRequest;
+import hgu.se.raonz.postLike.domain.entity.PostLike;
 import hgu.se.raonz.scrap.domain.entity.Scrap;
+import hgu.se.raonz.team.domain.entity.Team;
 import hgu.se.raonz.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,22 +27,26 @@ public class Post extends BaseEntity {
     private Long id;
 
 
-//    private String teamId; // 나중에 필요하면 추가
     private String title;
     private String content;
 //    private String fileAddressList;
     private int type;
-
-
+    
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Team team; // 나중에 필요하면 추가
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Scrap> scrapList;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikeList;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostFile> postFileList;
