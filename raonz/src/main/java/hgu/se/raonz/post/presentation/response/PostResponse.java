@@ -30,7 +30,7 @@ public class PostResponse {
     private boolean isScraped;
     private int likeCount;
     private int scrapeCount;
-    private LocalDateTime regDate;
+    private String regDate;
             
     private List<PostFileDto> postFileDtoList;
 
@@ -49,6 +49,17 @@ public class PostResponse {
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .postFileDtoList(post.getPostFileList().stream().map(PostFileDto::toDto).toList())
+                .build();
+    }
+
+    public static PostResponse toResponse(Post post) {
+        return PostResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .type(post.getType())
+                .userDto(UserDto.toResponse(post.getUser()))
+                .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .build();
     }
 

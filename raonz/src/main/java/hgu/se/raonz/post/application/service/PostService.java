@@ -30,7 +30,11 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import java.util.stream.Collectors;
+
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -196,5 +200,12 @@ public class PostService {
 
         }
         return postResponseList;
+    }
+
+    @Transactional
+    public List<PostResponse> getPostResponseWithUserId(String userId) {
+        List<Post> postList = postRepository.findPostListByUserId(userId);
+
+        return postList.stream().map(PostResponse::toResponse).collect(Collectors.toList());
     }
 }
