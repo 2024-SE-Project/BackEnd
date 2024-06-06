@@ -27,6 +27,9 @@ public class PostResponse {
     private List<CommentDto> commentList;
     private boolean isLike;
     private boolean isScraped;
+    private int likeCount;
+    private int scrapeCount;
+            
     private List<PostFileDto> postFileDtoList;
 
     public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
@@ -38,6 +41,8 @@ public class PostResponse {
                 .type(post.getType())
                 .isLike(isLike)
                 .isScraped(isScraped)
+                .likeCount(post.getPostLikeList().size())
+                .scrapeCount(post.getScrapList().size())
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .postFileDtoList(post.getPostFileList().stream().map(PostFileDto::toDto).toList())
