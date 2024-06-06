@@ -57,6 +57,8 @@ public class LoginService {
                     .id(googleUser.getId())
                     .name(googleUser.getName())
                     .email(googleUser.getEmail())
+                    .RC("RC를 수정해주세요.")
+                    .phoneNumber("핸드폰 번호를 수정해주세요.")
                     .build();
             user.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
             userRepository.save(user);

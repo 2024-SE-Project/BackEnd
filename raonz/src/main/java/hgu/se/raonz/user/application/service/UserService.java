@@ -81,6 +81,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) return null;
         user.setRC(RC);
+        userRepository.save(user);
 
         return user;
     }
@@ -90,6 +91,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) return null;
         user.setName(value);
+        userRepository.save(user);
 
         return user;
     }
@@ -99,6 +101,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) return null;
         user.setEmail(value);
+        userRepository.save(user);
 
         return user;
     }
@@ -108,6 +111,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) return null;
         user.setPhoneNumber(value);
+        userRepository.save(user);
 
         return user;
     }

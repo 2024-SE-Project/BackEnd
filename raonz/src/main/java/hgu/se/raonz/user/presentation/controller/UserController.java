@@ -74,6 +74,7 @@ public class UserController {
         String token = jwtProvider.resolveToken(request);
         String userId = jwtProvider.getAccount(token);
         User user = userService.updateRC(userRCUpdate.getValue(), userId);
+        System.out.println(user.getId());
 
         return ResponseEntity.ok(user.getId());
     }
