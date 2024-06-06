@@ -68,6 +68,8 @@ public class SecurityConfig {
                 .requestMatchers("/match/update/**").permitAll() //.hasRole("MANAGER")
                 .requestMatchers("/match/get/**").permitAll() //.hasRole("MANAGER")
 
+                .requestMatchers("/rank/team/**").permitAll() //.hasRole("MANAGER")
+
                 .requestMatchers("/login/oauth2/**").permitAll()
                 .requestMatchers("/api/v1/oauth2/google").permitAll()
                 .requestMatchers("/scrape/**").permitAll()
