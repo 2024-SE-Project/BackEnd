@@ -5,8 +5,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserRCUpdate {
     private String value;
 }

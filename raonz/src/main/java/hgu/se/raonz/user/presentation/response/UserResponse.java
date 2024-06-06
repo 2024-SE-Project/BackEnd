@@ -15,10 +15,12 @@ public class UserResponse {
     private String userId;
     private String email;
     private String token;
+    private String rc;
 
     public static UserResponse toResponse(User user, String token) {
         return UserResponse.builder()
                 .name(user.getName())
+                .rc(user.getRC())
                 .userId(user.getId())
                 .email(user.getEmail())
                 .token(token)

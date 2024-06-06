@@ -22,6 +22,8 @@ public class UserInfoDto {
     private List<ScrapDto> scrapDtoList;
     private List<PostLikeDto> postLikeDtoList;
     private List<PostResponse> postResponseList;
+    private String RC;
+    private String phoneNumber;
 
     public static UserInfoDto toResponse(User user, List<ScrapDto> scrapDtoList, List<PostLikeDto> postLikeDtoList, List<PostResponse> postResponseList) {
         return UserInfoDto.builder()
@@ -32,6 +34,8 @@ public class UserInfoDto {
                 .scrapDtoList(scrapDtoList)
                 .postLikeDtoList(postLikeDtoList)
                 .postResponseList(postResponseList)
+                .RC(user.getRC())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 
@@ -43,6 +47,8 @@ public class UserInfoDto {
                 .email(user.getEmail())
                 .scrapDtoList(scrapDtoList)
                 .postLikeDtoList(postLikeDtoList)
+                .RC(user.getRC())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 }
