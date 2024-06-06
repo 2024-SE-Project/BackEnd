@@ -128,8 +128,10 @@ public class TeamService {
         teamList.sort(Comparator.comparing(Team::getTotalLikeCount).reversed());
 
         List <TeamRankResponse> teamRankResponseList = new ArrayList<>();
+        int size = teamRankResponseList.size();
         // top 10
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 ; i++) {
+            if (i == size-1) break;
             teamRankResponseList.add(TeamRankResponse.toResponse(teamList.get(i)));
         }
         return teamRankResponseList;

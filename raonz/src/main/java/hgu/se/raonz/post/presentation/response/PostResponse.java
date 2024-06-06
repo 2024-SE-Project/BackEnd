@@ -7,6 +7,7 @@ import hgu.se.raonz.user.application.dto.UserDto;
 import hgu.se.raonz.user.domain.entity.User;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,6 +30,7 @@ public class PostResponse {
     private boolean isScraped;
     private int likeCount;
     private int scrapeCount;
+    private LocalDateTime regDate;
             
     private List<PostFileDto> postFileDtoList;
 
@@ -43,6 +45,7 @@ public class PostResponse {
                 .isScraped(isScraped)
                 .likeCount(post.getPostLikeList().size())
                 .scrapeCount(post.getScrapList().size())
+                .regDate(post.getRegDate())
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .postFileDtoList(post.getPostFileList().stream().map(PostFileDto::toDto).toList())
