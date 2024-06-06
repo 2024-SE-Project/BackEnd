@@ -87,9 +87,11 @@ public class PostController {
         return ResponseEntity.ok(postResponseList);
     }
 
-    @GetMapping({"/rank/like"})
-    public ResponseEntity<List<PostDto>> getRankStar() {
-        List<PostDto> postResponseList = postService.getRankLikePostResponseList();
+    @GetMapping("/rank/like")
+    public ResponseEntity<List<PostResponse>> getRankStar(HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String user_id = jwtProvider.getAccount(token);
+        List<PostResponse> postResponseList = postService.getRankLikePostResponseList(user_id);
 
         return ResponseEntity.ok(postResponseList);
     }

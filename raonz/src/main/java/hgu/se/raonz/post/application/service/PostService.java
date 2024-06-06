@@ -215,17 +215,20 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostDto> getRankLikePostResponseList() {
+    public List<PostResponse> getRankLikePostResponseList(String userId) {
         List<Post> postList = postRepository.findAll();
-        List<PostDto> postDtoList = new ArrayList<>();
+        List<PostResponse> postResponseList = new ArrayList<>();
         postList.sort(Comparator.comparing(Post::getLikeCount).reversed());
 
-        int size = postDtoList.size();
+        int size = postList.size();
         if (size > 10) size = 10;
         // top 10
         for (int i = 0; i < size ; i++) {
-            postDtoList.add(PostDto.toResponse(postList.get(i)));
+            Long postId = postList.get(i).getId();
+            boolean isPostLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId) != null;
+            boolean isScrap = scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
+            postResponseList.add(PostResponse.toResponse(postList.get(i), isPostLike, isScrap));
         }
-        return postDtoList;
+        return postResponseList;
     }
 }
