@@ -31,6 +31,7 @@ public class User extends BaseEntity {
 
     private String email;
     private String phoneNumber;
+    private String RC;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Post post;
