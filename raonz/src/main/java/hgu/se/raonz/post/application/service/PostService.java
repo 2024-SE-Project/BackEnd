@@ -197,6 +197,7 @@ public class PostService {
             boolean isPostLike = postLikeRepository.findPostLikeByUserIdAndPostId(userId, postId) != null;
             boolean isScrap = scrapRepository.findScrapByUserIdAndPostId(userId, postId) != null;
             postResponseList.add(PostResponse.toResponse(postList.get(i), isPostLike, isScrap));
+
         }
         return postResponseList;
     }

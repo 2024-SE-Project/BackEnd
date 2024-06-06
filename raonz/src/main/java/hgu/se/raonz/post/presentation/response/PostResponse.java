@@ -7,7 +7,11 @@ import hgu.se.raonz.user.application.dto.UserDto;
 import hgu.se.raonz.user.domain.entity.User;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -34,6 +38,7 @@ public class PostResponse {
 
     public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
         System.out.println("=====>4");
+
         return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())

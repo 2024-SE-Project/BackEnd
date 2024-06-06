@@ -24,6 +24,8 @@ public class Team {
     private String name;
     private String content;
     private String leaderId;
+    private String imgURL;
+    private String imgName;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Post> postList;
@@ -31,11 +33,13 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<TeamUser> teamUserList;
 
-    public static Team toAdd(TeamRequest teamRequest, String userId) {
+    public static Team toAdd(TeamRequest teamRequest, String imgURL, String imgName, String userId) {
         return Team.builder()
                 .name(teamRequest.getName())
                 .content(teamRequest.getContent())
                 .leaderId(userId)
+                .imgURL(imgURL)
+                .imgName(imgName)
                 .build();
     }
 

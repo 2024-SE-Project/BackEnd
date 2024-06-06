@@ -29,6 +29,7 @@ public class Post extends BaseEntity {
 
     private String title;
     private String content;
+
 //    private String fileAddressList;
     private int type;
     
