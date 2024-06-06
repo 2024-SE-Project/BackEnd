@@ -75,4 +75,40 @@ public class UserService {
     public User loadUserByUserId(String userId) {
         return userRepository.findById(userId).orElse(null);
     }
+
+    @Transactional
+    public User updateRC(String RC, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setRC(RC);
+
+        return user;
+    }
+
+    @Transactional
+    public User updateName(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setName(value);
+
+        return user;
+    }
+
+    @Transactional
+    public User updateEmail(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setEmail(value);
+
+        return user;
+    }
+
+    @Transactional
+    public User updatePhone(String value, String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        user.setPhoneNumber(value);
+
+        return user;
+    }
 }

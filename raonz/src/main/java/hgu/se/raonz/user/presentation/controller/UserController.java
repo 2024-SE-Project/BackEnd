@@ -12,6 +12,7 @@ import hgu.se.raonz.user.application.dto.UserDto;
 import hgu.se.raonz.user.application.dto.UserInfoDto;
 import hgu.se.raonz.user.application.service.UserService;
 import hgu.se.raonz.user.domain.entity.User;
+import hgu.se.raonz.user.presentation.request.UserRCUpdate;
 import hgu.se.raonz.user.presentation.request.UserRequest;
 import hgu.se.raonz.user.presentation.response.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,5 +67,41 @@ public class UserController {
 
         Integer num = 1;
         return ResponseEntity.ok(num);
+    }
+
+    @PatchMapping("/mypage/rc/update")
+    public ResponseEntity<String> updateUserRc(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updateRC(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/name/update")
+    public ResponseEntity<String> updateUserName(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updateName(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/email/update")
+    public ResponseEntity<String> updateUserEmail(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updateEmail(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @PatchMapping("/mypage/phone/update")
+    public ResponseEntity<String> updateUserPhone(@RequestBody UserRCUpdate userRCUpdate, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String userId = jwtProvider.getAccount(token);
+        User user = userService.updatePhone(userRCUpdate.getValue(), userId);
+
+        return ResponseEntity.ok(user.getId());
     }
 }
