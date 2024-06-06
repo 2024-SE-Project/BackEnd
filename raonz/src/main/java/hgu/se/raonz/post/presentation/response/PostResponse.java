@@ -41,5 +41,16 @@ public class PostResponse {
                 .build();
     }
 
+    public static PostResponse toResponse(Post post) {
+        return PostResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .type(post.getType())
+                .userDto(UserDto.toResponse(post.getUser()))
+                .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
+                .build();
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package hgu.se.raonz.user.presentation.controller;
 
 import hgu.se.raonz.commons.jwt.JWTProvider;
+import hgu.se.raonz.post.application.dto.PostDto;
+import hgu.se.raonz.post.application.service.PostService;
 import hgu.se.raonz.post.presentation.response.PostResponse;
 import hgu.se.raonz.postLike.application.dto.PostLikeDto;
 import hgu.se.raonz.postLike.application.service.PostLikeService;
@@ -20,12 +22,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin("*")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final ScrapService scrapService;
     private final PostLikeService postLikeService;
+    private final PostService postService;
     private final JWTProvider jwtProvider;
 
     @PostMapping("/")
@@ -42,7 +45,8 @@ public class UserController {
         String userId = jwtProvider.getAccount(token);
         List<ScrapDto> scrapDtoList = scrapService.getAllScrap(userId);
         List<PostLikeDto> postLikeDtoList = postLikeService.getAllPostLike(userId);
-        UserInfoDto userInfoDto = userService.getUserInfoDto(userId, scrapDtoList, postLikeDtoList);
+        List<PostResponse> postResponseList = postService.getPostResponseWithUserId(userId);
+        UserInfoDto userInfoDto = userService.getUserInfoDto(userId, scrapDtoList, postLikeDtoList, postResponseList);
 
 
         return ResponseEntity.ok(userInfoDto);
