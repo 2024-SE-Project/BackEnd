@@ -70,4 +70,9 @@ public class UserService {
         System.out.println("Success to find User");
         return UserInfoDto.toResponse(user, scrapDtoList, postLikeDtoList);
     }
+
+    @Transactional
+    public User loadUserByUserId(String userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 }
