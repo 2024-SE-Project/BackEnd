@@ -10,6 +10,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @Builder
@@ -36,6 +39,10 @@ public class PostResponse {
 
     public static PostResponse toResponse(Post post, boolean isLike, boolean isScraped) {
         System.out.println("=====>4");
+        LocalDateTime regdate = post.getRegDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = regdate.format(formatter);
+
         return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
@@ -45,7 +52,7 @@ public class PostResponse {
                 .isScraped(isScraped)
                 .likeCount(post.getPostLikeList().size())
                 .scrapeCount(post.getScrapList().size())
-                .regDate(post.getRegDate())
+                .regDate(formattedDateTime)
                 .userDto(UserDto.toResponse(post.getUser()))
                 .commentList(post.getCommentList().stream().map(CommentDto::toDto).toList())
                 .postFileDtoList(post.getPostFileList().stream().map(PostFileDto::toDto).toList())

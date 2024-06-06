@@ -1,5 +1,10 @@
 package hgu.se.raonz.team.application.service;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import hgu.se.raonz.comment.domain.entity.Comment;
 import hgu.se.raonz.post.domain.entity.Post;
 import hgu.se.raonz.post.presentation.request.PostUpdateRequest;
@@ -18,24 +23,58 @@ import hgu.se.raonz.user.domain.entity.User;
 import hgu.se.raonz.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class TeamService {
+    @Value("${spring.cloud.gcp.storage.credentials.location}")
+    private String keyFileName;
+    @Value("${spring.cloud.gcp.storage.bucket}") // application.yml에 써둔 bucket 이름
+    private String bucketName;
     private final TeamRepository teamRepository;
     private final TeamUserRepository teamUserRepository;
     private final UserRepository userRepository;
+    InputStream keyFile;
+    Storage storage;
 
     @Transactional
     public Long addTeam(TeamRequest teamRequest, String userId) {
         System.out.println(teamRequest.getName() + ": " + userId);
-        Team team = teamRepository.save(Team.toAdd(teamRequest, userId));
+        Team team;
+        try {
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+            String objectName = UUID.randomUUID() + "_" + teamRequest.getImg().getOriginalFilename();
 
+            // 버킷 객체 가져오기
+            Bucket bucket = storage.get(bucketName);
+
+            // 객체 생성 및 업로드
+            Blob blob = bucket.create(objectName, teamRequest.getImg().getInputStream(), teamRequest.getImg().getContentType());
+
+            // 업로드된 객체의 url 만들기
+            String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName;
+
+            team = teamRepository.save(Team.toAdd(teamRequest, uploadedImageUrl, objectName, userId));
+            keyFile.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
         return team.getId();
     }
 

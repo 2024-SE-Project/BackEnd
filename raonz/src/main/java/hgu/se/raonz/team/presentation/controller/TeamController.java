@@ -29,12 +29,14 @@ public class TeamController {
     private final JWTProvider jwtProvider;
 
 
-    @PostMapping("/team/add")
+    @GetMapping("/team/add")
     public ResponseEntity<Long> addTeam(@RequestBody TeamRequest teamRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
         Long teamId = teamService.addTeam(teamRequest, user_id);
+
         System.out.println("email List: " + teamRequest.getEmailList());
+
         if (teamRequest.getEmailList() != null) {
             List<Long> teamUserIdList = teamUserService.addTeamUser(teamId, teamRequest.getEmailList());
             System.out.println(teamUserIdList.size());
