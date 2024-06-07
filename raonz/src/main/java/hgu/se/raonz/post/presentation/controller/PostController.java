@@ -60,7 +60,7 @@ public class PostController {
     }
 
     @PatchMapping({"/post/update/{postId}", "/material/update/{postId}", "/faq/update/{postId}", "/match/update/{postId}"})
-    public ResponseEntity<Long> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest, HttpServletRequest request) {
+    public ResponseEntity<Long> updatePost(@PathVariable Long postId, @ModelAttribute PostUpdateRequest postUpdateRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
         Long returnId = postService.updatePost(postId, postUpdateRequest, user_id);

@@ -94,17 +94,37 @@ public class TeamService {
     }
 
     @Transactional
-    public Long updateTeam(Long teamId, TeamUpdateRequest teamUpdateRequest, String userId) {
+    public Long updateTeam(Long teamId, TeamRequest teamRequest, String userId) {
         Team team = teamRepository.findById(teamId).orElse(null);
 
-        if (team == null) return null;
+        team.setName(teamRequest.getName());
+        team.setContent(teamRequest.getContent());
+        teamRepository.save(team);
+        try {
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+            String objectName = UUID.randomUUID() + "_" + teamRequest.getImg().getOriginalFilename();
 
-        if (!team.getLeaderId().equals(userId)) {
-            System.out.println(userId + " is not LeaderId");
-            return null;
+            // 버킷 객체 가져오기
+            Bucket bucket = storage.get(bucketName);
+
+            // 객체 생성 및 업로드
+            Blob blob = bucket.create(objectName, teamRequest.getImg().getInputStream(), teamRequest.getImg().getContentType());
+
+            // 업로드된 객체의 url 만들기
+            String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName;
+
+            keyFile.close();
+            team.setImgURL(uploadedImageUrl);
+            team.setImgName(objectName);
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return team.getId();
         }
-        team.setName(teamUpdateRequest.getName());
-        team.setLeaderId(teamUpdateRequest.getLeaderId());
         teamRepository.save(team);
 
         return team.getId();

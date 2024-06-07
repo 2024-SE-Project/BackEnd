@@ -173,11 +173,50 @@ public class PostService {
             post.setTitle(postUpdateRequest.getTitle());
             post.setContent(postUpdateRequest.getContent());
             postRepository.save(post);
+            List<PostFile> postFiles = postFileRepository.findByPostId(postId);
+            postFileRepository.deleteAll(postFiles);
 
-            return post.getId();
         }
 
-        return null;
+        try {
+//            keyFile = new FileInputStream(keyFileName);
+            keyFile = ResourceUtils.getURL(keyFileName).openStream();
+            storage = (Storage) StorageOptions.newBuilder()
+                    .setCredentials(GoogleCredentials.fromStream(keyFile))
+                    .build()
+                    .getService();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        for (MultipartFile file: postUpdateRequest.getFileList()) {
+            try {
+                String objectName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+                // 버킷 객체 가져오기
+                Bucket bucket = storage.get(bucketName);
+
+                // 객체 생성 및 업로드
+                Blob blob = bucket.create(objectName, file.getInputStream(), file.getContentType());
+
+                // 업로드된 객체의 url 만들기
+                String uploadedImageUrl = "https://storage.cloud.google.com/" + bucketName + "/" + objectName;
+
+                PostFile postFile = postFileRepository.save(PostFile.toAdd(post, uploadedImageUrl, objectName));
+                postFileRepository.save(postFile);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        try {
+            keyFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        postRepository.save(post);
+        return post.getId();
     }
 
     @Transactional

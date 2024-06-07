@@ -56,10 +56,15 @@ public class TeamController {
     }
 
     @PatchMapping("/team/update/{teamId}")
-    public ResponseEntity<Long> updatePost(@PathVariable Long teamId, @RequestBody TeamUpdateRequest teamUpdateRequest, HttpServletRequest request) {
+    public ResponseEntity<Long> updatePost(@PathVariable Long teamId, @ModelAttribute TeamRequest teamRequest, HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String user_id = jwtProvider.getAccount(token);
-        Long returnId = teamService.updateTeam(teamId, teamUpdateRequest, user_id);
+        Long returnId = teamService.updateTeam(teamId, teamRequest, user_id);
+
+        if (teamRequest.getEmailList() != null) {
+            List<Long> teamUserIdList = teamUserService.addTeamUser(teamId, teamRequest.getEmailList());
+            System.out.println(teamUserIdList.size());
+        }
 
         return ResponseEntity.ok(returnId);
     }
